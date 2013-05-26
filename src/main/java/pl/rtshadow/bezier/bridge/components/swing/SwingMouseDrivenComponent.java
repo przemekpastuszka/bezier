@@ -63,6 +63,7 @@ public class SwingMouseDrivenComponent implements ExternalMouseDrivenComponent {
 
   @Override
   public void remove() {
+    component.setVisible(false);
     if(componentParent.isPresent()) {
       componentParent.get().remove(component);
     }
