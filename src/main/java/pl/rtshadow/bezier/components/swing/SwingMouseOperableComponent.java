@@ -1,3 +1,7 @@
+/*
+ *  Copyright Pastuszka Przemyslaw, University of Wroclaw, Poland (c) 2013.
+ */
+
 package pl.rtshadow.bezier.components.swing;
 
 import java.awt.*;
@@ -6,8 +10,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 import pl.rtshadow.bezier.components.Coordinates;
-import pl.rtshadow.bezier.events.MouseActionListener;
 import pl.rtshadow.bezier.components.MouseOperableComponent;
+import pl.rtshadow.bezier.events.MouseActionListener;
 import pl.rtshadow.bezier.events.swing.SwingMouseAction;
 
 public class SwingMouseOperableComponent implements MouseOperableComponent {
