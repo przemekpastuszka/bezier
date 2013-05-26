@@ -37,6 +37,7 @@ public class SwingControlPoint implements ControlPoint {
       public void onRemoval(Object objectBeingRemoved) {
         if (parent.isPresent()) {
           parent.get().remove(jComponent);
+          parent.get().revalidate();
           parent = Optional.absent();
         }
       }
