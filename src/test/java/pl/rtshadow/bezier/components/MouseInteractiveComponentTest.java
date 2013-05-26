@@ -20,12 +20,13 @@ import org.mockito.runners.MockitoJUnitRunner;
 import pl.rtshadow.bezier.bridge.components.ExternalMouseDrivenComponent;
 import pl.rtshadow.bezier.bridge.events.MouseAction;
 import pl.rtshadow.bezier.bridge.events.MouseActionListener;
-import pl.rtshadow.bezier.components.listeners.RemovalListener;
+import pl.rtshadow.bezier.components.actions.ComponentAction;
+import pl.rtshadow.bezier.components.listeners.ComponentActionListener;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MouseInteractiveComponentTest {
   @Mock
-  private RemovalListener removalListener;
+  private ComponentActionListener removalListener;
   @Mock
   private ExternalMouseDrivenComponent externalMouseDrivenComponent;
 
@@ -36,26 +37,24 @@ public class MouseInteractiveComponentTest {
   public void setup() {
     mouseInteractiveComponent = new MouseInteractiveComponent(externalMouseDrivenComponent);
 
+    mouseInteractiveComponent.addListener(ComponentAction.REMOVED, removalListener);
+
     registeredListeners = retrieveRegisteredListeners();
   }
 
   @Test
   public void notifiesListenersOnRightClickAndRemovesUnderlyingComponent() {
-    mouseInteractiveComponent.addRemovalListener(removalListener);
-
     notifyAll(new MouseAction(new Coordinates(0, 0), MouseAction.ButtonPressed.RIGHT));
 
-    verify(removalListener).onRemoval();
+    verify(removalListener).onComponentAction(ComponentAction.REMOVED);
     verify(externalMouseDrivenComponent).remove();
   }
 
   @Test
   public void doesNothingForLeftClick() {
-    mouseInteractiveComponent.addRemovalListener(removalListener);
-
     notifyAll(new MouseAction(new Coordinates(0, 0), MouseAction.ButtonPressed.LEFT));
 
-    verify(removalListener, never()).onRemoval();
+    verify(removalListener, never()).onComponentAction(ComponentAction.REMOVED);
     verify(externalMouseDrivenComponent, never()).remove();
   }
 

@@ -4,36 +4,25 @@
 
 package pl.rtshadow.bezier.components;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 import pl.rtshadow.bezier.bridge.components.ExternalMouseDrivenComponent;
 import pl.rtshadow.bezier.bridge.events.MouseAction;
 import pl.rtshadow.bezier.bridge.events.MouseActionListener;
-import pl.rtshadow.bezier.components.listeners.MoveListener;
-import pl.rtshadow.bezier.components.listeners.RemovalListener;
+import pl.rtshadow.bezier.components.actions.ComponentAction;
+import pl.rtshadow.bezier.components.listeners.ComponentActionListener;
 
 public class MouseInteractiveComponent implements InteractiveComponent {
   private final ExternalMouseDrivenComponent externalComponent;
   private int draggedAtX, draggedAtY;
 
-  private final Collection<MoveListener> moveListeners = new LinkedList<>();
-  private final Collection<RemovalListener> removalListeners = new LinkedList<>();
+  private final Multimap<ComponentAction, ComponentActionListener> listeners = HashMultimap.create();
 
-  public MouseInteractiveComponent(ExternalMouseDrivenComponent externalMouseDrivenComponent){
+  public MouseInteractiveComponent(ExternalMouseDrivenComponent externalMouseDrivenComponent) {
     this.externalComponent = externalMouseDrivenComponent;
 
     registerMouseActionListeners();
-    registerRemovalListener();
-  }
-
-  private void registerRemovalListener() {
-    addRemovalListener(new RemovalListener() {
-      @Override
-      public void onRemoval() {
-        externalComponent.remove();
-      }
-    });
   }
 
   private void registerMouseActionListeners() {
@@ -51,9 +40,9 @@ public class MouseInteractiveComponent implements InteractiveComponent {
         externalComponent.setCoordinates(new Coordinates(
             action.getMousePosition().getX() - draggedAtX + externalComponent.getCoordinates().getX(),
             action.getMousePosition().getY() - draggedAtY + externalComponent.getCoordinates().getY()
-        ));
+            ));
 
-        notifyMoveListeners();
+        notifyListeners(ComponentAction.MOVED);
       }
     });
 
@@ -61,33 +50,22 @@ public class MouseInteractiveComponent implements InteractiveComponent {
       @Override
       public void onMouseAction(MouseAction action) {
         if (action.getButtonPressed() == MouseAction.ButtonPressed.RIGHT) {
-          notifyRemovalListeners();
+          notifyListeners(ComponentAction.REMOVED);
+          externalComponent.remove();
         }
       }
     });
   }
 
-  private void notifyRemovalListeners() {
-    for(RemovalListener moveListener : removalListeners) {
-      moveListener.onRemoval();
-    }
-  }
-
-  private void notifyMoveListeners() {
-    Coordinates coordinates = externalComponent.getCoordinates();
-    for(MoveListener moveListener : moveListeners) {
-       moveListener.onMove(coordinates);
+  private void notifyListeners(ComponentAction componentAction) {
+    for (ComponentActionListener listener : listeners.get(componentAction)) {
+      listener.onComponentAction(componentAction);
     }
   }
 
   @Override
-  public void addMoveListener(MoveListener moveListener) {
-    moveListeners.add(moveListener);
-  }
-
-  @Override
-  public void addRemovalListener(RemovalListener removalListener) {
-    removalListeners.add(removalListener);
+  public void addListener(ComponentAction componentAction, ComponentActionListener componentActionListener) {
+    listeners.put(componentAction, componentActionListener);
   }
 
   @Override
