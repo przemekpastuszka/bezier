@@ -9,11 +9,13 @@ import java.awt.*;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import pl.rtshadow.bezier.points.ControlPoint;
-import pl.rtshadow.bezier.points.swing.SwingControlPoint;
+import pl.rtshadow.bezier.bridge.components.ExternalMouseDrivenComponent;
+import pl.rtshadow.bezier.bridge.components.swing.SwingMouseDrivenComponent;
+import pl.rtshadow.bezier.components.InteractiveComponent;
+import pl.rtshadow.bezier.components.MouseInteractiveComponent;
 
 public class BezierApplication {
-  private static Collection<ControlPoint> controlPoints = new LinkedList<>();
+  private static Collection<InteractiveComponent> controlPoints = new LinkedList<>();
 
   public static void main(String[] args) {
     JFrame frame = new JFrame("DragButton");
@@ -28,10 +30,8 @@ public class BezierApplication {
   }
 
   private static void addControlPoint(Container contentPane, JComponent component) {
-    SwingControlPoint swingControlPoint = new SwingControlPoint(component);
-    swingControlPoint.addTo(contentPane);
-
-    controlPoints.add(new SwingControlPoint(component));
+    ExternalMouseDrivenComponent swingMouseDrivenComponent = new SwingMouseDrivenComponent(component, contentPane);
+    controlPoints.add(new MouseInteractiveComponent(swingMouseDrivenComponent));
   }
 
   private static JComponent createComponent(String text) {

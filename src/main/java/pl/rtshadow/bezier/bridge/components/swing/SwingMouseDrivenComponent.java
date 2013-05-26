@@ -2,22 +2,32 @@
  *  Copyright Pastuszka Przemyslaw, University of Wroclaw, Poland (c) 2013.
  */
 
-package pl.rtshadow.bezier.components.swing;
+package pl.rtshadow.bezier.bridge.components.swing;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
+import com.google.common.base.Optional;
+
+import pl.rtshadow.bezier.bridge.components.ExternalMouseDrivenComponent;
+import pl.rtshadow.bezier.bridge.events.MouseActionListener;
+import pl.rtshadow.bezier.bridge.events.swing.SwingMouseAction;
 import pl.rtshadow.bezier.components.Coordinates;
-import pl.rtshadow.bezier.components.MouseOperableComponent;
-import pl.rtshadow.bezier.events.MouseActionListener;
-import pl.rtshadow.bezier.events.swing.SwingMouseAction;
 
-public class SwingMouseOperableComponent implements MouseOperableComponent {
+public class SwingMouseDrivenComponent implements ExternalMouseDrivenComponent {
   private final Component component;
+  private final Optional<Container> componentParent;
 
-  public SwingMouseOperableComponent(Component component) {
+  public SwingMouseDrivenComponent(Component component, Container parent) {
+    this.componentParent = Optional.of(parent);
+    this.component = component;
+    parent.add(component);
+  }
+
+  public SwingMouseDrivenComponent(Component component) {
+    this.componentParent = Optional.absent();
     this.component = component;
   }
 
@@ -26,7 +36,7 @@ public class SwingMouseOperableComponent implements MouseOperableComponent {
     component.addMouseListener(new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent e) {
-        mouseActionListener.action(new SwingMouseAction(e));
+        mouseActionListener.onMouseAction(new SwingMouseAction(e));
       }
     });
   }
@@ -36,7 +46,7 @@ public class SwingMouseOperableComponent implements MouseOperableComponent {
     component.addMouseMotionListener(new MouseMotionAdapter() {
       @Override
       public void mouseDragged(MouseEvent e) {
-        mouseActionListener.action(new SwingMouseAction(e));
+        mouseActionListener.onMouseAction(new SwingMouseAction(e));
       }
     });
   }
@@ -49,5 +59,12 @@ public class SwingMouseOperableComponent implements MouseOperableComponent {
   @Override
   public void setCoordinates(Coordinates coordinates) {
     component.setLocation(coordinates.getX(), coordinates.getY());
+  }
+
+  @Override
+  public void remove() {
+    if(componentParent.isPresent()) {
+      componentParent.get().remove(component);
+    }
   }
 }

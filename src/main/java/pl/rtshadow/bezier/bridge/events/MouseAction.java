@@ -2,7 +2,7 @@
  *  Copyright Pastuszka Przemyslaw, University of Wroclaw, Poland (c) 2013.
  */
 
-package pl.rtshadow.bezier.events;
+package pl.rtshadow.bezier.bridge.events;
 
 import pl.rtshadow.bezier.components.Coordinates;
 

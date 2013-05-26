@@ -2,12 +2,12 @@
  *  Copyright Pastuszka Przemyslaw, University of Wroclaw, Poland (c) 2013.
  */
 
-package pl.rtshadow.bezier.events.swing;
+package pl.rtshadow.bezier.bridge.events.swing;
 
 import java.awt.event.MouseEvent;
 
 import pl.rtshadow.bezier.components.Coordinates;
-import pl.rtshadow.bezier.events.MouseAction;
+import pl.rtshadow.bezier.bridge.events.MouseAction;
 
 public class SwingMouseAction extends MouseAction {
   public SwingMouseAction(MouseEvent event) {
