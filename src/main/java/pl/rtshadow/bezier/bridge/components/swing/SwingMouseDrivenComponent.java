@@ -12,8 +12,9 @@ import java.awt.event.MouseMotionAdapter;
 import com.google.common.base.Optional;
 
 import pl.rtshadow.bezier.bridge.components.ExternalMouseDrivenComponent;
+import pl.rtshadow.bezier.bridge.events.MouseAction;
 import pl.rtshadow.bezier.bridge.events.MouseActionListener;
-import pl.rtshadow.bezier.bridge.events.swing.SwingMouseAction;
+import pl.rtshadow.bezier.bridge.events.swing.SwingMouseActionData;
 import pl.rtshadow.bezier.components.Coordinates;
 
 public class SwingMouseDrivenComponent implements ExternalMouseDrivenComponent {
@@ -31,24 +32,34 @@ public class SwingMouseDrivenComponent implements ExternalMouseDrivenComponent {
     this.component = component;
   }
 
-  @Override
   public void addMousePressedListener(final MouseActionListener mouseActionListener) {
     component.addMouseListener(new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent e) {
-        mouseActionListener.onMouseAction(new SwingMouseAction(e));
+        mouseActionListener.onMouseAction(new SwingMouseActionData(e));
+      }
+    });
+  }
+
+  public void addMouseDraggedListener(final MouseActionListener mouseActionListener) {
+    component.addMouseMotionListener(new MouseMotionAdapter() {
+      @Override
+      public void mouseDragged(MouseEvent e) {
+        mouseActionListener.onMouseAction(new SwingMouseActionData(e));
       }
     });
   }
 
   @Override
-  public void addMouseDraggedListener(final MouseActionListener mouseActionListener) {
-    component.addMouseMotionListener(new MouseMotionAdapter() {
-      @Override
-      public void mouseDragged(MouseEvent e) {
-        mouseActionListener.onMouseAction(new SwingMouseAction(e));
-      }
-    });
+  public void addMouseActionListener(MouseAction action, MouseActionListener mouseActionListener) {
+    switch (action) {
+    case MOUSE_DRAGGED:
+      addMouseDraggedListener(mouseActionListener);
+      break;
+    case MOUSE_PRESSED:
+      addMousePressedListener(mouseActionListener);
+      break;
+    }
   }
 
   @Override
@@ -64,7 +75,7 @@ public class SwingMouseDrivenComponent implements ExternalMouseDrivenComponent {
   @Override
   public void remove() {
     component.setVisible(false);
-    if(componentParent.isPresent()) {
+    if (componentParent.isPresent()) {
       componentParent.get().remove(component);
     }
   }

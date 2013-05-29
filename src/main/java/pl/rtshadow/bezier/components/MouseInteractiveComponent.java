@@ -4,11 +4,14 @@
 
 package pl.rtshadow.bezier.components;
 
+import static pl.rtshadow.bezier.bridge.events.MouseAction.MOUSE_DRAGGED;
+import static pl.rtshadow.bezier.bridge.events.MouseAction.MOUSE_PRESSED;
+
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import pl.rtshadow.bezier.bridge.components.ExternalMouseDrivenComponent;
-import pl.rtshadow.bezier.bridge.events.MouseAction;
+import pl.rtshadow.bezier.bridge.events.MouseActionData;
 import pl.rtshadow.bezier.bridge.events.MouseActionListener;
 import pl.rtshadow.bezier.components.actions.ComponentAction;
 import pl.rtshadow.bezier.components.listeners.ComponentActionListener;
@@ -26,17 +29,17 @@ public class MouseInteractiveComponent implements InteractiveComponent {
   }
 
   private void registerMouseActionListeners() {
-    externalComponent.addMousePressedListener(new MouseActionListener() {
+    externalComponent.addMouseActionListener(MOUSE_PRESSED, new MouseActionListener() {
       @Override
-      public void onMouseAction(MouseAction action) {
+      public void onMouseAction(MouseActionData action) {
         draggedAtX = action.getMousePosition().getX();
         draggedAtY = action.getMousePosition().getY();
       }
     });
 
-    externalComponent.addMouseDraggedListener(new MouseActionListener() {
+    externalComponent.addMouseActionListener(MOUSE_DRAGGED, new MouseActionListener() {
       @Override
-      public void onMouseAction(MouseAction action) {
+      public void onMouseAction(MouseActionData action) {
         externalComponent.setCoordinates(new Coordinates(
             action.getMousePosition().getX() - draggedAtX + externalComponent.getCoordinates().getX(),
             action.getMousePosition().getY() - draggedAtY + externalComponent.getCoordinates().getY()
@@ -46,10 +49,10 @@ public class MouseInteractiveComponent implements InteractiveComponent {
       }
     });
 
-    externalComponent.addMousePressedListener(new MouseActionListener() {
+    externalComponent.addMouseActionListener(MOUSE_PRESSED, new MouseActionListener() {
       @Override
-      public void onMouseAction(MouseAction action) {
-        if (action.getButtonPressed() == MouseAction.ButtonPressed.RIGHT) {
+      public void onMouseAction(MouseActionData action) {
+        if (action.getButtonPressed() == MouseActionData.ButtonPressed.RIGHT) {
           notifyListeners(ComponentAction.REMOVED);
           externalComponent.remove();
         }

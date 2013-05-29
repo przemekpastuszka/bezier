@@ -5,5 +5,5 @@
 package pl.rtshadow.bezier.bridge.events;
 
 public interface MouseActionListener {
-  void onMouseAction(MouseAction action);
+  void onMouseAction(MouseActionData action);
 }

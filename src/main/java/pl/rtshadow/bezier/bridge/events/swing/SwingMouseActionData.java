@@ -6,11 +6,11 @@ package pl.rtshadow.bezier.bridge.events.swing;
 
 import java.awt.event.MouseEvent;
 
+import pl.rtshadow.bezier.bridge.events.MouseActionData;
 import pl.rtshadow.bezier.components.Coordinates;
-import pl.rtshadow.bezier.bridge.events.MouseAction;
 
-public class SwingMouseAction extends MouseAction {
-  public SwingMouseAction(MouseEvent event) {
+public class SwingMouseActionData extends MouseActionData {
+  public SwingMouseActionData(MouseEvent event) {
     super(new Coordinates(event.getPoint()), retrievePressedButton(event.getButton()));
   }
 

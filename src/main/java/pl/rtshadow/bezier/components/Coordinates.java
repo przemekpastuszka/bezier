@@ -4,6 +4,9 @@
 
 package pl.rtshadow.bezier.components;
 
+import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
+import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
+
 import java.awt.*;
 
 public class Coordinates {
@@ -27,4 +30,13 @@ public class Coordinates {
     return y;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    return reflectionEquals(this, o);
+  }
+
+  @Override
+  public int hashCode() {
+    return reflectionHashCode(this);
+  }
 }
