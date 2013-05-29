@@ -14,6 +14,7 @@ import static pl.rtshadow.bezier.bridge.events.MouseAction.MOUSE_DRAGGED;
 import static pl.rtshadow.bezier.bridge.events.MouseAction.MOUSE_PRESSED;
 import static pl.rtshadow.bezier.bridge.events.MouseActionData.ButtonPressed.LEFT;
 import static pl.rtshadow.bezier.bridge.events.MouseActionData.ButtonPressed.RIGHT;
+import static pl.rtshadow.bezier.components.actions.ComponentAction.REMOVED;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,11 +30,10 @@ import pl.rtshadow.bezier.bridge.components.ExternalMouseDrivenComponent;
 import pl.rtshadow.bezier.bridge.events.MouseAction;
 import pl.rtshadow.bezier.bridge.events.MouseActionData;
 import pl.rtshadow.bezier.bridge.events.MouseActionListener;
-import pl.rtshadow.bezier.components.actions.ComponentAction;
 import pl.rtshadow.bezier.components.listeners.ComponentActionListener;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MouseInteractiveComponentTest {
+public class MouseInteractiveMovableComponentTest {
   private static final Coordinates ZERO_POINT = new Coordinates(0, 0);
 
   @Mock
@@ -41,13 +41,13 @@ public class MouseInteractiveComponentTest {
   @Mock
   private ExternalMouseDrivenComponent externalMouseDrivenComponent;
   @InjectMocks
-  private MouseInteractiveComponent mouseInteractiveComponent;
+  private MouseInteractiveMovableComponent mouseInteractiveMovableComponent;
 
   private Multimap<MouseAction, MouseActionListener> registeredListeners = create();
 
   @Before
   public void setup() {
-    mouseInteractiveComponent.addListener(ComponentAction.REMOVED, removalListener);
+    mouseInteractiveMovableComponent.addListener(REMOVED, removalListener);
 
     when(externalMouseDrivenComponent.getCoordinates()).thenReturn(ZERO_POINT);
 
@@ -58,7 +58,7 @@ public class MouseInteractiveComponentTest {
   public void notifiesListenersOnRightClickAndRemovesUnderlyingComponent() {
     notifyAll(MOUSE_PRESSED, new MouseActionData(ZERO_POINT, RIGHT));
 
-    verify(removalListener).onComponentAction(ComponentAction.REMOVED);
+    verify(removalListener).onComponentAction(REMOVED);
     verify(externalMouseDrivenComponent).remove();
   }
 
@@ -66,7 +66,7 @@ public class MouseInteractiveComponentTest {
   public void doesNothingForLeftClick() {
     notifyAll(MOUSE_PRESSED, new MouseActionData(ZERO_POINT, LEFT));
 
-    verify(removalListener, never()).onComponentAction(ComponentAction.REMOVED);
+    verify(removalListener, never()).onComponentAction(REMOVED);
     verify(externalMouseDrivenComponent, never()).remove();
   }
 

@@ -21,18 +21,19 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.google.common.collect.Multimap;
 
 import pl.rtshadow.bezier.components.actions.ComponentAction;
+import pl.rtshadow.bezier.components.factory.ActionBasedComponentFactory;
 import pl.rtshadow.bezier.components.listeners.ComponentActionListener;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InteractiveComponentsListTest {
   @Mock
-  private ComponentFactory componentFactory;
+  private ActionBasedComponentFactory actionBasedComponentFactory;
   @Mock
   private InteractiveComponent interactiveComponent;
   @InjectMocks
   private InteractiveComponentsList componentsList;
 
-  private Collection<ComponentFactory.ComponentCreationListener> componentCreationListeners;
+  private Collection<ActionBasedComponentFactory.ComponentCreationListener> componentCreationListeners;
   private Multimap<ComponentAction, ComponentActionListener> componentActionListeners = create();
 
   @Before
@@ -69,14 +70,14 @@ public class InteractiveComponentsListTest {
   }
 
   private void createObject(InteractiveComponent component) {
-    for (ComponentFactory.ComponentCreationListener listener : componentCreationListeners) {
+    for (ActionBasedComponentFactory.ComponentCreationListener listener : componentCreationListeners) {
       listener.onCreation(component);
     }
   }
 
-  private List<ComponentFactory.ComponentCreationListener> retrieveComponentCreationListeners() {
-    ArgumentCaptor<ComponentFactory.ComponentCreationListener> captor = ArgumentCaptor.forClass(ComponentFactory.ComponentCreationListener.class);
-    verify(componentFactory, atLeastOnce()).addComponentCreationListener(captor.capture());
+  private List<ActionBasedComponentFactory.ComponentCreationListener> retrieveComponentCreationListeners() {
+    ArgumentCaptor<ActionBasedComponentFactory.ComponentCreationListener> captor = ArgumentCaptor.forClass(ActionBasedComponentFactory.ComponentCreationListener.class);
+    verify(actionBasedComponentFactory, atLeastOnce()).addComponentCreationListener(captor.capture());
     return captor.getAllValues();
   }
 

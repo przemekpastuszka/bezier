@@ -13,14 +13,15 @@ import java.util.List;
 import com.google.common.collect.ForwardingList;
 
 import pl.rtshadow.bezier.components.actions.ComponentAction;
+import pl.rtshadow.bezier.components.factory.ActionBasedComponentFactory;
 import pl.rtshadow.bezier.components.listeners.ComponentActionListener;
 
 public class InteractiveComponentsList extends ForwardingList<InteractiveComponent> {
   private final List<InteractiveComponent> components = new ArrayList<>();
   private final List<InteractiveComponent> unmodifiableViewOfComponents = unmodifiableList(components);
 
-  public InteractiveComponentsList(ComponentFactory factory) {
-     factory.addComponentCreationListener(new ComponentFactory.ComponentCreationListener() {
+  public InteractiveComponentsList(ActionBasedComponentFactory factory) {
+     factory.addComponentCreationListener(new ActionBasedComponentFactory.ComponentCreationListener() {
        @Override
        public void onCreation(final InteractiveComponent component) {
          components.add(component);

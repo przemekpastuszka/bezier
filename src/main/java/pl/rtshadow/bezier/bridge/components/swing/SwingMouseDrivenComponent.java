@@ -25,6 +25,7 @@ public class SwingMouseDrivenComponent implements ExternalMouseDrivenComponent {
     this.componentParent = Optional.of(parent);
     this.component = component;
     parent.add(component);
+    parent.repaint();
   }
 
   public SwingMouseDrivenComponent(Component component) {
@@ -50,6 +51,15 @@ public class SwingMouseDrivenComponent implements ExternalMouseDrivenComponent {
     });
   }
 
+  private void addMouseClickedListener(final MouseActionListener mouseActionListener) {
+    component.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        mouseActionListener.onMouseAction(new SwingMouseActionData(e));
+      }
+    });
+  }
+
   @Override
   public void addMouseActionListener(MouseAction action, MouseActionListener mouseActionListener) {
     switch (action) {
@@ -59,6 +69,8 @@ public class SwingMouseDrivenComponent implements ExternalMouseDrivenComponent {
     case MOUSE_PRESSED:
       addMousePressedListener(mouseActionListener);
       break;
+    case MOUSE_CLICKED:
+      addMouseClickedListener(mouseActionListener);
     }
   }
 
