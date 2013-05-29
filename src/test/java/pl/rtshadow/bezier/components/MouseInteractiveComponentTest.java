@@ -19,6 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -39,13 +40,13 @@ public class MouseInteractiveComponentTest {
   private ComponentActionListener removalListener;
   @Mock
   private ExternalMouseDrivenComponent externalMouseDrivenComponent;
+  @InjectMocks
+  private MouseInteractiveComponent mouseInteractiveComponent;
 
   private Multimap<MouseAction, MouseActionListener> registeredListeners = create();
-  private InteractiveComponent mouseInteractiveComponent;
 
   @Before
   public void setup() {
-    mouseInteractiveComponent = new MouseInteractiveComponent(externalMouseDrivenComponent);
     mouseInteractiveComponent.addListener(ComponentAction.REMOVED, removalListener);
 
     when(externalMouseDrivenComponent.getCoordinates()).thenReturn(ZERO_POINT);
