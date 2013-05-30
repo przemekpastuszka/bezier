@@ -22,6 +22,11 @@ public class InjectionConfiguration extends AbstractModule {
   }
 
   @Provides
+  public Container provideContainer(final JFrame frame) {
+    return frame.getContentPane();
+  }
+
+  @Provides
   @Singleton
   public JFrame provideFrame() {
     JFrame frame = new JFrame();
@@ -34,13 +39,13 @@ public class InjectionConfiguration extends AbstractModule {
   }
 
   @Provides
-  public InteractiveComponentsList provideButtonsList(JFrame frame, ComponentFactory componentFactory) {
+  public InteractiveComponentsList provideButtonsList(Container container, ComponentFactory componentFactory) {
     return new InteractiveComponentsList(
-        new OnClickComponentFactory(new SwingMouseDrivenComponent(frame), componentFactory));
+        new OnClickComponentFactory(new SwingMouseDrivenComponent(container), componentFactory));
   }
 
   @Provides
-  public ComponentFactory provideButtonFactory(final JFrame frame) {
+  public ComponentFactory provideButtonFactory(final Container container) {
     return new ComponentFactory() {
       int itemCount = 0;
 
@@ -48,7 +53,7 @@ public class InjectionConfiguration extends AbstractModule {
       public InteractiveComponent createFromMouseData(MouseActionData data) {
         Component button = new SomeButton(itemCount++, data.getMousePosition().getX(), data.getMousePosition().getY());
         return new MouseInteractiveMovableComponent(
-            new SwingMouseDrivenComponent(button, frame.getContentPane()));
+            new SwingMouseDrivenComponent(button, container));
       }
     };
   }
