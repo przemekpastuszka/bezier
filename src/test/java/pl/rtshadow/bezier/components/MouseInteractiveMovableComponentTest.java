@@ -16,6 +16,8 @@ import static pl.rtshadow.bezier.bridge.events.MouseActionData.ButtonPressed.LEF
 import static pl.rtshadow.bezier.bridge.events.MouseActionData.ButtonPressed.RIGHT;
 import static pl.rtshadow.bezier.components.actions.ComponentAction.REMOVED;
 
+import java.util.EnumSet;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -79,7 +81,7 @@ public class MouseInteractiveMovableComponentTest {
   }
 
   private void retrieveRegisteredListeners() {
-    for (MouseAction action : MouseAction.values()) {
+    for (MouseAction action : EnumSet.of(MOUSE_PRESSED, MOUSE_DRAGGED)) {
       ArgumentCaptor<MouseActionListener> captor = ArgumentCaptor.forClass(MouseActionListener.class);
 
       verify(externalMouseDrivenComponent, atLeastOnce()).addMouseActionListener(eq(action), captor.capture());
