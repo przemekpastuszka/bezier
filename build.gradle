@@ -10,6 +10,7 @@ sourceCompatibility = '1.7'
 dependencies {
   compile 'org.apache.commons:commons-lang3:3.1'
   compile 'com.google.guava:guava:14.0.1'
+  compile 'com.google.inject:guice:3.0'
 
   // all of this should be testCompile, but for some reason it's not working
   compile 'org.mockito:mockito-all:1.9.5'
