@@ -19,8 +19,11 @@ public class BezierCurveComponent {
   private final BezierCurve curve;
 
   @Inject
-  public BezierCurveComponent(final Surface surface, InteractiveComponentsList controlPoints) {
-    this.curve = new BezierCurve(controlPoints);
+  public BezierCurveComponent(
+      final Surface surface,
+      InteractiveComponentsList controlPoints,
+      BezierEvaluationAlgorithm evaluationAlgorithm) {
+    this.curve = new BezierCurve(controlPoints, evaluationAlgorithm);
 
     controlPoints.addListenerOnEachComponent(MOVED, redrawCurve(surface));
     controlPoints.addListenerOnEachComponent(REMOVED, redrawCurve(surface));

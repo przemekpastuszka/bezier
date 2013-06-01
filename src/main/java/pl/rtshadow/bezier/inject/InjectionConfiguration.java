@@ -14,6 +14,8 @@ import pl.rtshadow.bezier.components.InteractiveComponentsList;
 import pl.rtshadow.bezier.components.MouseInteractiveMovableComponent;
 import pl.rtshadow.bezier.components.factory.ComponentFactory;
 import pl.rtshadow.bezier.components.factory.OnClickComponentFactory;
+import pl.rtshadow.bezier.curve.BezierEvaluationAlgorithm;
+import pl.rtshadow.bezier.curve.DeCasteljauAlgorithm;
 import pl.rtshadow.bezier.drawable.Surface;
 import pl.rtshadow.bezier.drawable.swing.SwingSurface;
 
@@ -25,6 +27,7 @@ public class InjectionConfiguration extends AbstractModule {
   protected void configure() {
     bind(Surface.class).to(SwingSurface.class);
     bind(Container.class).to(JLayeredPane.class);
+    bind(BezierEvaluationAlgorithm.class).to(DeCasteljauAlgorithm.class);
   }
 
   @Provides
