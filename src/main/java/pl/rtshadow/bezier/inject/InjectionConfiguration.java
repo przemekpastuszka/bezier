@@ -1,7 +1,6 @@
 package pl.rtshadow.bezier.inject;
 
 import javax.swing.*;
-
 import java.awt.*;
 
 import com.google.inject.AbstractModule;
@@ -15,27 +14,40 @@ import pl.rtshadow.bezier.components.InteractiveComponentsList;
 import pl.rtshadow.bezier.components.MouseInteractiveMovableComponent;
 import pl.rtshadow.bezier.components.factory.ComponentFactory;
 import pl.rtshadow.bezier.components.factory.OnClickComponentFactory;
+import pl.rtshadow.bezier.drawable.Surface;
+import pl.rtshadow.bezier.drawable.swing.SwingSurface;
 
 public class InjectionConfiguration extends AbstractModule {
   @Override
   protected void configure() {
-  }
-
-  @Provides
-  public Container provideContainer(final JFrame frame) {
-    return frame.getContentPane();
+    bind(Surface.class).to(SwingSurface.class);
+    bind(Container.class).to(JLayeredPane.class);
   }
 
   @Provides
   @Singleton
-  public JFrame provideFrame() {
+  public JLayeredPane provideLayeredPane() {
+     return new JLayeredPane();
+  }
+
+  @Provides
+  @Singleton
+  public JFrame provideFrame(JLayeredPane pane) {
     JFrame frame = new JFrame();
-    frame.setLayout(null);
+    frame.setLayout(new BorderLayout());
     frame.setSize(300, 300);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setLocationRelativeTo(null);
+    frame.add(pane, BorderLayout.CENTER);
     frame.setVisible(true);
     return frame;
+  }
+
+  @Provides
+  public SwingSurface provideDrawingSurface(Container container) {
+    SwingSurface swingSurface = new SwingSurface();
+    container.add(swingSurface, new Integer(0), 0);
+    return swingSurface;
   }
 
   @Provides

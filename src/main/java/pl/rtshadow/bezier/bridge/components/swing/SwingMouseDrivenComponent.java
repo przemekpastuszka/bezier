@@ -24,8 +24,7 @@ public class SwingMouseDrivenComponent implements ExternalMouseDrivenComponent {
   public SwingMouseDrivenComponent(Component component, Container parent) {
     this.componentParent = Optional.of(parent);
     this.component = component;
-    parent.add(component);
-    parent.repaint();
+    parent.add(component, new Integer(1), 0);
   }
 
   public SwingMouseDrivenComponent(Component component) {
