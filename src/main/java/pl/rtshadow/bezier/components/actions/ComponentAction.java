@@ -5,5 +5,5 @@
 package pl.rtshadow.bezier.components.actions;
 
 public enum ComponentAction {
-  MOVED, REMOVED;
+  ADDED, MOVED, REMOVED;
 }

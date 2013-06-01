@@ -11,8 +11,8 @@ import pl.rtshadow.bezier.drawable.Surface;
 public class SwingSurface extends JPanel implements Surface {
   private final Collection<Coordinates> points = new ArrayList<>();
 
-  public SwingSurface() {
-    setSize(300, 300);
+  public SwingSurface(int sizeX, int sizeY) {
+    setSize(sizeX, sizeY);
   }
 
   @Override

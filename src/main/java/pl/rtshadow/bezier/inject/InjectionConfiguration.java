@@ -18,6 +18,9 @@ import pl.rtshadow.bezier.drawable.Surface;
 import pl.rtshadow.bezier.drawable.swing.SwingSurface;
 
 public class InjectionConfiguration extends AbstractModule {
+  private static final int WIDTH = 300;
+  private static final int HEIGHT = 300;
+
   @Override
   protected void configure() {
     bind(Surface.class).to(SwingSurface.class);
@@ -35,7 +38,7 @@ public class InjectionConfiguration extends AbstractModule {
   public JFrame provideFrame(JLayeredPane pane) {
     JFrame frame = new JFrame();
     frame.setLayout(new BorderLayout());
-    frame.setSize(300, 300);
+    frame.setSize(WIDTH, HEIGHT);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setLocationRelativeTo(null);
     frame.add(pane, BorderLayout.CENTER);
@@ -45,7 +48,7 @@ public class InjectionConfiguration extends AbstractModule {
 
   @Provides
   public SwingSurface provideDrawingSurface(Container container) {
-    SwingSurface swingSurface = new SwingSurface();
+    SwingSurface swingSurface = new SwingSurface(WIDTH, HEIGHT);
     container.add(swingSurface, new Integer(0), 0);
     return swingSurface;
   }
