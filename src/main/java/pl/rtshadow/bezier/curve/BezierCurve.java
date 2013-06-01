@@ -6,6 +6,7 @@ package pl.rtshadow.bezier.curve;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.transform;
+import static java.lang.Math.abs;
 
 import java.util.List;
 
@@ -29,13 +30,37 @@ public class BezierCurve {
     List<Coordinates> controlPoints = retrieveControlPoints();
 
     if (controlPoints.size() >= 2) {
-      List<Coordinates> pointsToDraw = newArrayList();
-      float step = 0.01f;
-      for (float t = 0; t <= 1; t += step) {
-        pointsToDraw.add(evaluationAlgorithm.evaluatePoint(controlPoints, t));
-      }
-      surface.drawPoints(pointsToDraw);
+      surface.drawPoints(computeDrawPoints(controlPoints));
     }
+  }
+
+  private List<Coordinates> computeDrawPoints(List<Coordinates> controlPoints) {
+    List<Coordinates> pointsToDraw = newArrayList();
+
+    float step = 0.01f;
+
+    Coordinates previousPoint = evaluationAlgorithm.evaluatePoint(controlPoints, 0);
+    pointsToDraw.add(previousPoint);
+
+    for (float t = 0; t <= 1 - step; t += step) {
+
+      while (true) {
+        Coordinates nextPointCandidate = evaluationAlgorithm.evaluatePoint(controlPoints, t + step);
+        if (areClose(previousPoint, nextPointCandidate)) {
+          pointsToDraw.add(nextPointCandidate);
+          previousPoint = nextPointCandidate;
+          break;
+        }
+
+        step /= 2;
+      }
+
+    }
+    return pointsToDraw;
+  }
+
+  private boolean areClose(Coordinates a, Coordinates b) {
+    return abs(a.getX() - b.getX()) <= 1 && abs(a.getY() - b.getY()) <= 1;
   }
 
   private List<Coordinates> retrieveControlPoints() {

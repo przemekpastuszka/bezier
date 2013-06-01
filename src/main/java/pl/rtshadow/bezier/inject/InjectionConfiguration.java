@@ -20,8 +20,8 @@ import pl.rtshadow.bezier.drawable.Surface;
 import pl.rtshadow.bezier.drawable.swing.SwingSurface;
 
 public class InjectionConfiguration extends AbstractModule {
-  private static final int WIDTH = 300;
-  private static final int HEIGHT = 300;
+  private static final int WIDTH = 800;
+  private static final int HEIGHT = 600;
 
   @Override
   protected void configure() {
