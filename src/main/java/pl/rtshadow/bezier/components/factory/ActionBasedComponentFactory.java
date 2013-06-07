@@ -6,10 +6,12 @@ package pl.rtshadow.bezier.components.factory;
 
 import pl.rtshadow.bezier.components.InteractiveComponent;
 
-public interface ActionBasedComponentFactory {
+public interface ActionBasedComponentFactory extends ComponentFactory {
   void addComponentCreationListener(ComponentCreationListener listener);
 
   public static interface ComponentCreationListener {
     void onCreation(InteractiveComponent component);
   }
+
+  void deactivate();
 }

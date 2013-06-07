@@ -5,6 +5,4 @@ import pl.rtshadow.bezier.components.InteractiveComponent;
 
 public interface ComponentFactory {
     InteractiveComponent createFromPosition(Coordinates coordinates);
-
-    void reset();
 }

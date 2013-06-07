@@ -4,7 +4,6 @@
 
 package pl.rtshadow.bezier.components;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.unmodifiableList;
 import static pl.rtshadow.bezier.components.actions.ComponentAction.ADDED;
 import static pl.rtshadow.bezier.components.actions.ComponentAction.MOVED;
@@ -25,14 +24,16 @@ public class InteractiveComponentsList extends ForwardingList<InteractiveCompone
   private final List<InteractiveComponent> components = new ArrayList<>();
   private final List<InteractiveComponent> unmodifiableViewOfComponents = unmodifiableList(components);
   private final Multimap<ComponentAction, ComponentActionListener> listeners = HashMultimap.create();
+  private final ActionBasedComponentFactory factory;
 
   public InteractiveComponentsList(ActionBasedComponentFactory factory) {
      factory.addComponentCreationListener(new ActionBasedComponentFactory.ComponentCreationListener() {
        @Override
        public void onCreation(final InteractiveComponent component) {
-         add(component);
+          add(component);
        }
      });
+    this.factory = factory;
   }
 
   private void registerMoveListener(InteractiveComponent component) {
@@ -70,6 +71,10 @@ public class InteractiveComponentsList extends ForwardingList<InteractiveCompone
     listeners.put(componentAction, componentActionListener);
   }
 
+  public void add(Coordinates coordinates) {
+    add(factory.createFromPosition(coordinates));
+  }
+
   @Override
   public boolean add(InteractiveComponent component) {
     components.add(component);
@@ -81,10 +86,10 @@ public class InteractiveComponentsList extends ForwardingList<InteractiveCompone
     return true;
   }
 
-  @Override
-  public void clear() {
-     for(InteractiveComponent interactiveComponent : newArrayList(components)) {
-         interactiveComponent.remove();
+  public void deactivate() {
+     factory.deactivate();
+     for(InteractiveComponent interactiveComponent : components) {
+         interactiveComponent.deactivate();
      }
   }
 }

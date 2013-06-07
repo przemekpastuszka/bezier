@@ -8,22 +8,27 @@ import java.util.Collection;
 import pl.rtshadow.bezier.bridge.components.ExternalMouseDrivenComponent;
 import pl.rtshadow.bezier.bridge.events.MouseActionData;
 import pl.rtshadow.bezier.bridge.events.MouseActionListener;
+import pl.rtshadow.bezier.components.Coordinates;
 import pl.rtshadow.bezier.components.InteractiveComponent;
 
 public class OnClickComponentFactory implements ActionBasedComponentFactory {
   private final Collection<ComponentCreationListener> listeners = new ArrayList<>();
+  private final ComponentFactory factory;
+
+  private boolean isActive = true;
 
   public OnClickComponentFactory(ExternalMouseDrivenComponent component, final ComponentFactory factory) {
     component.addMouseActionListener(MOUSE_CLICKED, new MouseActionListener() {
 
       @Override
       public void onMouseAction(MouseActionData action) {
-           if(action.getButtonPressed() == MouseActionData.ButtonPressed.LEFT) {
+           if(isActive && action.getButtonPressed() == MouseActionData.ButtonPressed.LEFT) {
              InteractiveComponent newComponent = factory.createFromPosition(action.getMousePosition());
              notifyAllListeners(newComponent);
            }
       }
     });
+    this.factory = factory;
   }
 
   private void notifyAllListeners(InteractiveComponent newComponent) {
@@ -35,5 +40,15 @@ public class OnClickComponentFactory implements ActionBasedComponentFactory {
   @Override
   public void addComponentCreationListener(ComponentCreationListener listener) {
     listeners.add(listener);
+  }
+
+  @Override
+  public void deactivate() {
+    isActive = false;
+  }
+
+  @Override
+  public InteractiveComponent createFromPosition(Coordinates coordinates) {
+    return factory.createFromPosition(coordinates);
   }
 }

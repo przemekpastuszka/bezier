@@ -12,5 +12,5 @@ public interface InteractiveComponent {
 
   Coordinates getCoordinates();
 
-  void remove();
+  void deactivate();
 }

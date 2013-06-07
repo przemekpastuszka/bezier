@@ -24,7 +24,6 @@ public class SwingMouseDrivenComponent implements ExternalMouseDrivenComponent {
   public SwingMouseDrivenComponent(Component component, Container parent) {
     this.componentParent = Optional.of(parent);
     this.component = component;
-    parent.add(component, new Integer(1), 0);
   }
 
   public SwingMouseDrivenComponent(Component component) {
@@ -85,9 +84,14 @@ public class SwingMouseDrivenComponent implements ExternalMouseDrivenComponent {
 
   @Override
   public void remove() {
-    component.setVisible(false);
+    deactivate();
     if (componentParent.isPresent()) {
       componentParent.get().remove(component);
     }
+  }
+
+  @Override
+  public void deactivate() {
+    component.setVisible(false);
   }
 }

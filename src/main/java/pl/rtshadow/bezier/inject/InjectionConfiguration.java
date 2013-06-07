@@ -50,7 +50,8 @@ public class InjectionConfiguration extends AbstractModule {
   }
 
   @Provides
-  public SwingSurface provideDrawingSurface(Container container) {
+  @Singleton
+  public SwingSurface provideDrawingSurface(JLayeredPane container) {
     SwingSurface swingSurface = new SwingSurface(WIDTH, HEIGHT);
     container.add(swingSurface, new Integer(0), 0);
     return swingSurface;
@@ -63,21 +64,16 @@ public class InjectionConfiguration extends AbstractModule {
   }
 
   @Provides
-  @Singleton
-  public ComponentFactory provideButtonFactory(final Container container) {
+  public ComponentFactory provideButtonFactory(final JLayeredPane container) {
     return new ComponentFactory() {
       int itemCount = 0;
 
       @Override
       public InteractiveComponent createFromPosition(Coordinates coordinates) {
         Component button = new SomeButton(itemCount++, coordinates.getXAsInt(), coordinates.getYAsInt());
+        container.add(button, 2 * (container.highestLayer() / 2) + 1, 0);
         return new MouseInteractiveMovableComponent(
             new SwingMouseDrivenComponent(button, container));
-      }
-
-      @Override
-      public void reset() {
-        itemCount = 0;
       }
     };
   }

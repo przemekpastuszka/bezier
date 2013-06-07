@@ -16,4 +16,6 @@ public interface ExternalMouseDrivenComponent {
   void setCoordinates(Coordinates coordinates);
 
   void remove();
+
+  void deactivate();
 }
