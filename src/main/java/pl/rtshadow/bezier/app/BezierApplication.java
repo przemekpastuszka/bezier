@@ -38,7 +38,7 @@ import pl.rtshadow.bezier.components.actions.ComponentAction;
 import pl.rtshadow.bezier.components.listeners.ComponentActionListener;
 import pl.rtshadow.bezier.curve.BezierCurve;
 import pl.rtshadow.bezier.curve.evaluation.BezierEvaluationAlgorithm;
-import pl.rtshadow.bezier.curve.transformations.DegreeElevationInversion;
+import pl.rtshadow.bezier.curve.transformations.LeastSquaresReduction;
 import pl.rtshadow.bezier.drawable.Surface;
 import pl.rtshadow.bezier.inject.InjectionConfiguration;
 
@@ -63,6 +63,7 @@ public class BezierApplication {
   private static void showGui() {
     injector = Guice.createInjector(new InjectionConfiguration());
     JFrame frame = injector.getInstance(JFrame.class);
+
     surface = injector.getInstance(Surface.class);
 
     curves.add(bezierCurveFrom(Collections.EMPTY_LIST));
@@ -84,7 +85,7 @@ public class BezierApplication {
     BezierCurve lastCurve = curves.get(curves.size() - 1);
 
     lastCurve.deactivate();
-    BezierCurve newCurve = bezierCurveFrom(lastCurve.transformation(new DegreeElevationInversion()));
+    BezierCurve newCurve = bezierCurveFrom(lastCurve.transformation(new LeastSquaresReduction()));
     newCurve.draw(surface);
 
     curves.add(newCurve);

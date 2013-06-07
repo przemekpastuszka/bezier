@@ -11,7 +11,7 @@ import java.util.List;
 
 import pl.rtshadow.bezier.components.Coordinates;
 
-public class DegreeElevationInversion implements BezierTransformation {
+public abstract class DegreeElevationInversion implements BezierTransformation {
 
   @Override
   public List<Coordinates> apply(List<Coordinates> controlPoints) {
@@ -21,21 +21,7 @@ public class DegreeElevationInversion implements BezierTransformation {
 
     List<Coordinates> bOneControlPoints = computeFirstPoints(controlPoints, n);
     List<Coordinates> bTwoControlPoints = computeSecondPoints(controlPoints, n);
-    return sumOfParts(n, bOneControlPoints, bTwoControlPoints);
-  }
-
-  private List<Coordinates> sumOfParts(int n, List<Coordinates> bOneControlPoints, List<Coordinates> bTwoControlPoints) {
-    List<Coordinates> newControlPoints = bOneControlPoints.subList(0, n / 2);
-    if (n % 2 == 1) {
-      newControlPoints.add(
-          multiply(0.5,
-              add(
-                  bOneControlPoints.get(n / 2),
-                  bTwoControlPoints.get(n / 2))));
-    }
-    newControlPoints.addAll(bTwoControlPoints.subList(n - n / 2, n));
-
-    return newControlPoints;
+    return blend(n, bOneControlPoints, bTwoControlPoints);
   }
 
   private List<Coordinates> computeFirstPoints(List<Coordinates> controlPoints, int n) {
@@ -68,15 +54,18 @@ public class DegreeElevationInversion implements BezierTransformation {
     return bTwoControlPoints;
   }
 
-  private List<Coordinates> farinWeighedAverage(int n, List<Coordinates> bOneControlPoints, List<Coordinates> bTwoControlPoints) {
+  private List<Coordinates> blend(int n, List<Coordinates> bOneControlPoints, List<Coordinates> bTwoControlPoints) {
     List<Coordinates> newControlPoints = newArrayListWithCapacity(n);
+    List<Double> alphas = getAlphas(n);
     for (int i = 0; i <= n - 1; ++i) {
       Coordinates nextPoint =
           add(
-              multiply(1f - i / ((float) n - 1f), bOneControlPoints.get(i)),
-              multiply(i / ((float) n - 1f), bTwoControlPoints.get(i)));
+              multiply(1 - alphas.get(i), bOneControlPoints.get(i)),
+              multiply(alphas.get(i), bTwoControlPoints.get(i)));
       newControlPoints.add(nextPoint);
     }
     return newControlPoints;
   }
+
+  protected abstract List<Double> getAlphas(int n);
 }

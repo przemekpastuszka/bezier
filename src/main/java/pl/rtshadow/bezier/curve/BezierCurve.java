@@ -25,7 +25,6 @@ public class BezierCurve {
   private final BezierEvaluationAlgorithm evaluationAlgorithm;
   private final Color color;
 
-
   public BezierCurve(InteractiveComponentsList controlPoints, BezierEvaluationAlgorithm evaluationAlgorithm, Color color) {
     this.controlPoints = controlPoints;
     this.evaluationAlgorithm = evaluationAlgorithm;
