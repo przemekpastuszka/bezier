@@ -18,8 +18,10 @@ public class OnClickComponentFactory implements ActionBasedComponentFactory {
 
       @Override
       public void onMouseAction(MouseActionData action) {
-           InteractiveComponent newComponent = factory.createFromMouseData(action);
-           notifyAllListeners(newComponent);
+           if(action.getButtonPressed() == MouseActionData.ButtonPressed.LEFT) {
+             InteractiveComponent newComponent = factory.createFromPosition(action.getMousePosition());
+             notifyAllListeners(newComponent);
+           }
       }
     });
   }

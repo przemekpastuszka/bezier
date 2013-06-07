@@ -11,4 +11,6 @@ public interface InteractiveComponent {
   void addListener(ComponentAction componentAction, ComponentActionListener componentActionListener);
 
   Coordinates getCoordinates();
+
+  void remove();
 }

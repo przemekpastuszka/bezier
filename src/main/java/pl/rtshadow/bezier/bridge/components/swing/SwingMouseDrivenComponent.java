@@ -80,7 +80,7 @@ public class SwingMouseDrivenComponent implements ExternalMouseDrivenComponent {
 
   @Override
   public void setCoordinates(Coordinates coordinates) {
-    component.setLocation(coordinates.getX(), coordinates.getY());
+    component.setLocation(coordinates.getXAsInt(), coordinates.getYAsInt());
   }
 
   @Override

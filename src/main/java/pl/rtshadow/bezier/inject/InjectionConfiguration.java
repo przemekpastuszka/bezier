@@ -8,14 +8,14 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import pl.rtshadow.bezier.bridge.components.swing.SwingMouseDrivenComponent;
-import pl.rtshadow.bezier.bridge.events.MouseActionData;
+import pl.rtshadow.bezier.components.Coordinates;
 import pl.rtshadow.bezier.components.InteractiveComponent;
 import pl.rtshadow.bezier.components.InteractiveComponentsList;
 import pl.rtshadow.bezier.components.MouseInteractiveMovableComponent;
 import pl.rtshadow.bezier.components.factory.ComponentFactory;
 import pl.rtshadow.bezier.components.factory.OnClickComponentFactory;
-import pl.rtshadow.bezier.curve.BezierEvaluationAlgorithm;
-import pl.rtshadow.bezier.curve.DeCasteljauAlgorithm;
+import pl.rtshadow.bezier.curve.evaluation.BezierEvaluationAlgorithm;
+import pl.rtshadow.bezier.curve.evaluation.DeCasteljauAlgorithm;
 import pl.rtshadow.bezier.drawable.Surface;
 import pl.rtshadow.bezier.drawable.swing.SwingSurface;
 
@@ -63,15 +63,21 @@ public class InjectionConfiguration extends AbstractModule {
   }
 
   @Provides
+  @Singleton
   public ComponentFactory provideButtonFactory(final Container container) {
     return new ComponentFactory() {
       int itemCount = 0;
 
       @Override
-      public InteractiveComponent createFromMouseData(MouseActionData data) {
-        Component button = new SomeButton(itemCount++, data.getMousePosition().getX(), data.getMousePosition().getY());
+      public InteractiveComponent createFromPosition(Coordinates coordinates) {
+        Component button = new SomeButton(itemCount++, coordinates.getXAsInt(), coordinates.getYAsInt());
         return new MouseInteractiveMovableComponent(
             new SwingMouseDrivenComponent(button, container));
+      }
+
+      @Override
+      public void reset() {
+        itemCount = 0;
       }
     };
   }

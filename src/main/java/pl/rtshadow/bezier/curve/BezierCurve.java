@@ -5,16 +5,18 @@
 package pl.rtshadow.bezier.curve;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Lists.transform;
 import static java.lang.Math.abs;
 
 import java.util.List;
 
 import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 import pl.rtshadow.bezier.components.Coordinates;
 import pl.rtshadow.bezier.components.InteractiveComponent;
 import pl.rtshadow.bezier.components.InteractiveComponentsList;
+import pl.rtshadow.bezier.curve.evaluation.BezierEvaluationAlgorithm;
+import pl.rtshadow.bezier.curve.transformations.BezierTransformation;
 import pl.rtshadow.bezier.drawable.Surface;
 
 public class BezierCurve {
@@ -34,15 +36,19 @@ public class BezierCurve {
     }
   }
 
+  public List<Coordinates> transformation(BezierTransformation transformation) {
+    return transformation.apply(retrieveControlPoints());
+  }
+
   private List<Coordinates> computeDrawPoints(List<Coordinates> controlPoints) {
     List<Coordinates> pointsToDraw = newArrayList();
 
-    float step = 0.01f;
+    double step = 0.01f;
 
     Coordinates previousPoint = evaluationAlgorithm.evaluatePoint(controlPoints, 0);
     pointsToDraw.add(previousPoint);
 
-    for (float t = 0; t <= 1 - step; t += step) {
+    for (double t = 0; t <= 1 - step; t += step) {
 
       while (true) {
         Coordinates nextPointCandidate = evaluationAlgorithm.evaluatePoint(controlPoints, t + step);
@@ -64,7 +70,7 @@ public class BezierCurve {
   }
 
   private List<Coordinates> retrieveControlPoints() {
-    return transform(this.controlPoints, new Function<InteractiveComponent, Coordinates>() {
+    return Lists.transform(this.controlPoints, new Function<InteractiveComponent, Coordinates>() {
       @Override
       public Coordinates apply(InteractiveComponent input) {
         return input.getCoordinates();

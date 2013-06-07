@@ -13,7 +13,7 @@ import pl.rtshadow.bezier.bridge.events.MouseActionData;
 import pl.rtshadow.bezier.bridge.events.MouseActionListener;
 
 public class MouseInteractiveMovableComponent extends MouseInteractiveComponent {
-  private int draggedAtX, draggedAtY;
+  private double draggedAtX, draggedAtY;
 
   public MouseInteractiveMovableComponent(ExternalMouseDrivenComponent externalMouseDrivenComponent) {
     super(externalMouseDrivenComponent);

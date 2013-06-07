@@ -36,7 +36,7 @@ public class SwingSurface extends JPanel implements Surface {
 
     g.setColor(Color.BLACK);
     for(Coordinates point : points) {
-      g.drawRect(point.getX(), point.getY(), 1, 1);
+      g.drawRect(point.getXAsInt(), point.getYAsInt(), 1, 1);
     }
   }
 }

@@ -4,6 +4,7 @@
 
 package pl.rtshadow.bezier.components;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.unmodifiableList;
 import static pl.rtshadow.bezier.components.actions.ComponentAction.ADDED;
 import static pl.rtshadow.bezier.components.actions.ComponentAction.MOVED;
@@ -29,11 +30,7 @@ public class InteractiveComponentsList extends ForwardingList<InteractiveCompone
      factory.addComponentCreationListener(new ActionBasedComponentFactory.ComponentCreationListener() {
        @Override
        public void onCreation(final InteractiveComponent component) {
-         components.add(component);
-         removeFromListOnRemoval(component);
-         registerMoveListener(component);
-
-         notifyListeners(ADDED);
+         add(component);
        }
      });
   }
@@ -71,5 +68,23 @@ public class InteractiveComponentsList extends ForwardingList<InteractiveCompone
 
   public void addListenerOnEachComponent(ComponentAction componentAction, ComponentActionListener componentActionListener) {
     listeners.put(componentAction, componentActionListener);
+  }
+
+  @Override
+  public boolean add(InteractiveComponent component) {
+    components.add(component);
+    removeFromListOnRemoval(component);
+    registerMoveListener(component);
+
+    notifyListeners(ADDED);
+
+    return true;
+  }
+
+  @Override
+  public void clear() {
+     for(InteractiveComponent interactiveComponent : newArrayList(components)) {
+         interactiveComponent.remove();
+     }
   }
 }

@@ -27,8 +27,7 @@ public class MouseInteractiveComponent implements InteractiveComponent {
       @Override
       public void onMouseAction(MouseActionData action) {
         if (action.getButtonPressed() == MouseActionData.ButtonPressed.RIGHT) {
-          notifyListeners(REMOVED);
-          externalComponent.remove();
+          remove();
         }
       }
     });
@@ -48,5 +47,11 @@ public class MouseInteractiveComponent implements InteractiveComponent {
   @Override
   public Coordinates getCoordinates() {
     return externalComponent.getCoordinates();
+  }
+
+  @Override
+  public void remove() {
+    notifyListeners(REMOVED);
+    externalComponent.remove();
   }
 }
