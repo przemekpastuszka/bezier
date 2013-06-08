@@ -10,6 +10,12 @@ import static java.util.Collections.nCopies;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Original blending method for elevation inversion, proposed by Forrest (1972)
+ * Just take first half of first control points and second half of second control points
+ * and concatenate them together. In case of odd number of control points,
+ * let the midpoint be the average of midpoints of first and second set.
+ */
 public class ForrestDegreeReduction extends DegreeElevationInversion {
   @Override
   protected List<Double> getAlphas(int n) {
