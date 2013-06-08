@@ -18,3 +18,10 @@ dependencies {
   compile 'org.easytesting:fest-assert:1.4'
   compile 'junit:junit:4.11'
 }
+
+// creates fat jar with all dependencies
+// not very pretty or KISS, but makes app easier to distribute
+jar {
+    dependsOn configurations.runtime
+    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+}
