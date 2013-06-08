@@ -4,25 +4,26 @@
 
 package pl.rtshadow.bezier.components;
 
-import static java.util.Collections.unmodifiableList;
 import static pl.rtshadow.bezier.components.actions.ComponentAction.ADDED;
 import static pl.rtshadow.bezier.components.actions.ComponentAction.MOVED;
 import static pl.rtshadow.bezier.components.actions.ComponentAction.REMOVED;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import com.google.common.collect.ForwardingList;
+import com.google.common.base.Function;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Iterators;
 import com.google.common.collect.Multimap;
 
 import pl.rtshadow.bezier.components.actions.ComponentAction;
 import pl.rtshadow.bezier.components.factory.ActionBasedComponentFactory;
 import pl.rtshadow.bezier.components.listeners.ComponentActionListener;
+import pl.rtshadow.bezier.util.BoundedIterable;
 
-public class InteractiveComponentsList extends ForwardingList<InteractiveComponent> {
+public class InteractiveComponentsList implements BoundedIterable<Coordinates> {
   private final List<InteractiveComponent> components = new ArrayList<>();
-  private final List<InteractiveComponent> unmodifiableViewOfComponents = unmodifiableList(components);
   private final Multimap<ComponentAction, ComponentActionListener> listeners = HashMultimap.create();
   private final ActionBasedComponentFactory factory;
 
@@ -62,11 +63,6 @@ public class InteractiveComponentsList extends ForwardingList<InteractiveCompone
     }
   }
 
-  @Override
-  protected List<InteractiveComponent> delegate() {
-    return unmodifiableViewOfComponents;
-  }
-
   public void addListenerOnEachComponent(ComponentAction componentAction, ComponentActionListener componentActionListener) {
     listeners.put(componentAction, componentActionListener);
   }
@@ -75,8 +71,7 @@ public class InteractiveComponentsList extends ForwardingList<InteractiveCompone
     add(factory.createFromPosition(coordinates));
   }
 
-  @Override
-  public boolean add(InteractiveComponent component) {
+  private boolean add(InteractiveComponent component) {
     components.add(component);
     removeFromListOnRemoval(component);
     registerMoveListener(component);
@@ -91,5 +86,20 @@ public class InteractiveComponentsList extends ForwardingList<InteractiveCompone
      for(InteractiveComponent interactiveComponent : components) {
          interactiveComponent.deactivate();
      }
+  }
+
+  @Override
+  public int getSize() {
+    return components.size();
+  }
+
+  @Override
+  public Iterator<Coordinates> iterator() {
+    return Iterators.transform(components.iterator(), new Function<InteractiveComponent, Coordinates>() {
+      @Override
+      public Coordinates apply(InteractiveComponent input) {
+        return input.getCoordinates();
+      }
+    });
   }
 }

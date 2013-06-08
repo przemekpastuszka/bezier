@@ -5,6 +5,7 @@
 package pl.rtshadow.bezier.curve.evaluation;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newArrayListWithCapacity;
 import static pl.rtshadow.bezier.components.Coordinates.add;
 import static pl.rtshadow.bezier.components.Coordinates.multiply;
@@ -12,20 +13,17 @@ import static pl.rtshadow.bezier.components.Coordinates.multiply;
 import java.util.List;
 
 import pl.rtshadow.bezier.components.Coordinates;
+import pl.rtshadow.bezier.util.BoundedIterable;
 
 public class DeCasteljauAlgorithm implements BezierEvaluationAlgorithm {
 
   @Override
-  public Coordinates evaluatePoint(List<Coordinates> controlPoints, double argument) {
-    checkArgument(controlPoints.size() >= 2);
+  public Coordinates evaluatePoint(BoundedIterable<Coordinates> coefficients, double argument) {
+    checkArgument(coefficients.getSize() >= 2);
 
-    return evaluate(controlPoints, argument);
-  }
+    List<Coordinates> lastLevel = newArrayList(coefficients);
 
-  private Coordinates evaluate(List<Coordinates> coefficients, double argument) {
-    List<Coordinates> lastLevel = coefficients;
-
-    int n = coefficients.size() - 1;
+    int n = coefficients.getSize() - 1;
     for(int i = 1; i <= n; ++i) {
       lastLevel = computeNewLevel(lastLevel, argument);
     }

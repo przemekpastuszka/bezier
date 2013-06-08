@@ -5,6 +5,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static pl.rtshadow.bezier.components.actions.ComponentAction.REMOVED;
 
 import java.util.Collection;
@@ -26,6 +27,8 @@ import pl.rtshadow.bezier.components.listeners.ComponentActionListener;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InteractiveComponentsListTest {
+  private final static Coordinates ZERO_COORDINATES = new Coordinates(0, 0);
+
   @Mock
   private ActionBasedComponentFactory actionBasedComponentFactory;
   @Mock
@@ -39,6 +42,8 @@ public class InteractiveComponentsListTest {
   @Before
   public void setup() {
     componentCreationListeners = retrieveComponentCreationListeners();
+
+    when(interactiveComponent.getCoordinates()).thenReturn(ZERO_COORDINATES);
   }
 
   @Test
@@ -50,7 +55,7 @@ public class InteractiveComponentsListTest {
   public void addsItemOnCreation() {
     createObject(interactiveComponent);
 
-    assertThat(componentsList).containsOnly(interactiveComponent);
+    assertThat(componentsList.iterator()).containsOnly(ZERO_COORDINATES);
   }
 
   @Test
@@ -60,7 +65,7 @@ public class InteractiveComponentsListTest {
 
     notifyComponentActionListeners(REMOVED);
 
-    assertThat(componentsList).isEmpty();
+    assertThat(componentsList.iterator()).isEmpty();
   }
 
   private void notifyComponentActionListeners(ComponentAction action) {

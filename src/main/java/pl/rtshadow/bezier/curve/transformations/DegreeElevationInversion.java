@@ -14,17 +14,20 @@ import static pl.rtshadow.bezier.components.Coordinates.multiply;
 import java.util.List;
 
 import pl.rtshadow.bezier.components.Coordinates;
+import pl.rtshadow.bezier.util.BoundedIterable;
 
 public abstract class DegreeElevationInversion implements BezierTransformation {
 
   @Override
-  public List<Coordinates> apply(List<Coordinates> controlPoints) {
-    checkArgument(controlPoints.size() > 2);
+  public List<Coordinates> apply(BoundedIterable<Coordinates> controlPoints) {
+    checkArgument(controlPoints.getSize() > 2);
 
-    int n = controlPoints.size() - 1;
+    List<Coordinates> controlPointsCopy = newArrayList(controlPoints);
 
-    List<Coordinates> bOneControlPoints = computeFirstPoints(controlPoints, n);
-    List<Coordinates> bTwoControlPoints = computeSecondPoints(controlPoints, n);
+    int n = controlPoints.getSize() - 1;
+
+    List<Coordinates> bOneControlPoints = computeFirstPoints(controlPointsCopy, n);
+    List<Coordinates> bTwoControlPoints = computeSecondPoints(controlPointsCopy, n);
     return blend(n, bOneControlPoints, bTwoControlPoints);
   }
 

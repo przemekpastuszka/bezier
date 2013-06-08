@@ -16,13 +16,14 @@ import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.linear.SingularValueDecomposition;
 
 import pl.rtshadow.bezier.components.Coordinates;
+import pl.rtshadow.bezier.util.BoundedIterable;
 
 public class LeastSquaresReduction implements BezierTransformation {
   @Override
-  public List<Coordinates> apply(List<Coordinates> controlPoints) {
+  public List<Coordinates> apply(BoundedIterable<Coordinates> controlPoints) {
     // M^T * M * Bnew = M^T * Bold
 
-    int n = controlPoints.size() - 1;
+    int n = controlPoints.getSize() - 1;
     RealMatrix M = prepareMMatrix(n);
     DecompositionSolver solver = new SingularValueDecomposition(M).getSolver();
 
@@ -37,8 +38,8 @@ public class LeastSquaresReduction implements BezierTransformation {
     return newControlPoints;
   }
 
-  private RealVector getXs(List<Coordinates> coordinates) {
-    double[] xs = new double[coordinates.size()];
+  private RealVector getXs(BoundedIterable<Coordinates> coordinates) {
+    double[] xs = new double[coordinates.getSize()];
     int i = 0;
     for (Coordinates coordinate : coordinates) {
       xs[i++] = coordinate.getX();
@@ -47,8 +48,8 @@ public class LeastSquaresReduction implements BezierTransformation {
     return new ArrayRealVector(xs);
   }
 
-  private RealVector getYs(List<Coordinates> coordinates) {
-    double[] xs = new double[coordinates.size()];
+  private RealVector getYs(BoundedIterable<Coordinates> coordinates) {
+    double[] xs = new double[coordinates.getSize()];
     int i = 0;
     for (Coordinates coordinate : coordinates) {
       xs[i++] = coordinate.getY();
