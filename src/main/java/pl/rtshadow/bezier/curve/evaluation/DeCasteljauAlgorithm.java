@@ -13,7 +13,6 @@ import static pl.rtshadow.bezier.util.Coordinates.multiply;
 import java.util.List;
 
 import pl.rtshadow.bezier.util.Coordinate;
-import pl.rtshadow.bezier.util.BoundedIterable;
 
 public class DeCasteljauAlgorithm implements BezierEvaluationAlgorithm {
 
@@ -24,7 +23,7 @@ public class DeCasteljauAlgorithm implements BezierEvaluationAlgorithm {
     checkArgument(lastLevel.size() >= 2);
 
     int n = lastLevel.size() - 1;
-    for(int i = 1; i <= n; ++i) {
+    for (int i = 1; i <= n; ++i) {
       lastLevel = computeNewLevel(lastLevel, argument);
     }
 
@@ -34,7 +33,7 @@ public class DeCasteljauAlgorithm implements BezierEvaluationAlgorithm {
   private List<Coordinate> computeNewLevel(List<Coordinate> lastLevel, double argument) {
     List<Coordinate> newLevel = newArrayListWithCapacity(lastLevel.size() - 1);
 
-    for(int i = 0; i < lastLevel.size() - 1; ++i) {
+    for (int i = 0; i < lastLevel.size() - 1; ++i) {
       newLevel.add(add(multiply(1 - argument, lastLevel.get(i)), multiply(argument, lastLevel.get(i + 1))));
     }
 

@@ -51,8 +51,13 @@ public class DensePixelEvaluatorTest {
   public void doesNotGenerateGapBetweenPixels() {
     Collection<Coordinate> pixelLocations = pixelsEvaluator.computePixelPositionsFrom(EMPTY_LIST, evaluationAlgorithm);
 
+    Coordinate previous = null;
     for(Coordinate location : pixelLocations) {
-      assertThat(countNeighbours(location, pixelLocations)).isPositive();
+      if(previous != null) {
+        assertThat(areNeighbours(previous, location));
+      }
+
+      previous = location;
     }
   }
 
@@ -62,22 +67,6 @@ public class DensePixelEvaluatorTest {
 
     assertThat(containsWithDelta(pixelLocations, new Coordinate(0, 0)));
     assertThat(containsWithDelta(pixelLocations, new Coordinate(SCALE_FACTOR, SCALE_FACTOR)));
-  }
-
-  private int countNeighbours(Coordinate location, Collection<Coordinate> pixelLocations) {
-    int neighbours = 0;
-
-    for(Coordinate neighbourCandidate : pixelLocations) {
-      if(areDifferent(location, neighbourCandidate) && areNeighbours(location, neighbourCandidate)) {
-         ++neighbours;
-      }
-    }
-
-    return neighbours;
-  }
-
-  private boolean areDifferent(Coordinate a, Coordinate b) {
-    return !a.equals(b);
   }
 
   private boolean containsWithDelta(Collection<Coordinate> pixelLocations, Coordinate location) {
