@@ -2,7 +2,7 @@
  *  Copyright Pastuszka Przemyslaw, University of Wroclaw, Poland (c) 2013.
  */
 
-package pl.rtshadow.bezier.components;
+package pl.rtshadow.bezier.util;
 
 import static java.lang.Math.round;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
@@ -12,16 +12,16 @@ import java.awt.*;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
-public class Coordinates {
+public class Coordinate {
   private final double x;
   private final double y;
 
-  public Coordinates(double x, double y) {
+  public Coordinate(double x, double y) {
     this.x = x;
     this.y = y;
   }
 
-  public Coordinates(Point point) {
+  public Coordinate(Point point) {
     this(point.x, point.y);
   }
 
@@ -39,14 +39,6 @@ public class Coordinates {
 
   public int getYAsInt() {
     return (int) round(y);
-  }
-
-  public static Coordinates multiply(double scalar, Coordinates coordinates) {
-    return new Coordinates(scalar * coordinates.getX(), scalar * coordinates.getY());
-  }
-
-  public static Coordinates add(Coordinates a, Coordinates b) {
-    return new Coordinates(a.getX() + b.getX(), a.getY() + b.getY());
   }
 
   @Override

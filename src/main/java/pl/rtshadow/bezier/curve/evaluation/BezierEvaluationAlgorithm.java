@@ -4,9 +4,8 @@
 
 package pl.rtshadow.bezier.curve.evaluation;
 
-import pl.rtshadow.bezier.components.Coordinates;
-import pl.rtshadow.bezier.util.BoundedIterable;
+import pl.rtshadow.bezier.util.Coordinate;
 
 public interface BezierEvaluationAlgorithm {
-  Coordinates evaluatePoint(BoundedIterable<Coordinates> controlPoints, double argument);
+  Coordinate evaluatePoint(Iterable<Coordinate> controlPoints, double argument);
 }

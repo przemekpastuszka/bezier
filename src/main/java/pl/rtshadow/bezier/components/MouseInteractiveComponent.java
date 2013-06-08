@@ -11,6 +11,7 @@ import pl.rtshadow.bezier.bridge.events.MouseActionData;
 import pl.rtshadow.bezier.bridge.events.MouseActionListener;
 import pl.rtshadow.bezier.components.actions.ComponentAction;
 import pl.rtshadow.bezier.components.listeners.ComponentActionListener;
+import pl.rtshadow.bezier.util.Coordinate;
 
 public class MouseInteractiveComponent implements InteractiveComponent {
   protected final ExternalMouseDrivenComponent externalComponent;
@@ -46,7 +47,7 @@ public class MouseInteractiveComponent implements InteractiveComponent {
   }
 
   @Override
-  public Coordinates getCoordinates() {
+  public Coordinate getCoordinates() {
     return externalComponent.getCoordinates();
   }
 

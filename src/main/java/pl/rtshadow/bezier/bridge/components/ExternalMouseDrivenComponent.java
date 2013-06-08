@@ -6,14 +6,14 @@ package pl.rtshadow.bezier.bridge.components;
 
 import pl.rtshadow.bezier.bridge.events.MouseAction;
 import pl.rtshadow.bezier.bridge.events.MouseActionListener;
-import pl.rtshadow.bezier.components.Coordinates;
+import pl.rtshadow.bezier.util.Coordinate;
 
 public interface ExternalMouseDrivenComponent {
   void addMouseActionListener(MouseAction action, MouseActionListener mouseActionListener);
 
-  Coordinates getCoordinates();
+  Coordinate getCoordinates();
 
-  void setCoordinates(Coordinates coordinates);
+  void setCoordinates(Coordinate coordinate);
 
   void remove();
 

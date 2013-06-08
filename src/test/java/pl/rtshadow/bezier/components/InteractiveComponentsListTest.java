@@ -24,10 +24,11 @@ import com.google.common.collect.Multimap;
 import pl.rtshadow.bezier.components.actions.ComponentAction;
 import pl.rtshadow.bezier.components.factory.ActionBasedComponentFactory;
 import pl.rtshadow.bezier.components.listeners.ComponentActionListener;
+import pl.rtshadow.bezier.util.Coordinate;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InteractiveComponentsListTest {
-  private final static Coordinates ZERO_COORDINATES = new Coordinates(0, 0);
+  private final static Coordinate ZERO_COORDINATE = new Coordinate(0, 0);
 
   @Mock
   private ActionBasedComponentFactory actionBasedComponentFactory;
@@ -43,7 +44,7 @@ public class InteractiveComponentsListTest {
   public void setup() {
     componentCreationListeners = retrieveComponentCreationListeners();
 
-    when(interactiveComponent.getCoordinates()).thenReturn(ZERO_COORDINATES);
+    when(interactiveComponent.getCoordinates()).thenReturn(ZERO_COORDINATE);
   }
 
   @Test
@@ -55,7 +56,7 @@ public class InteractiveComponentsListTest {
   public void addsItemOnCreation() {
     createObject(interactiveComponent);
 
-    assertThat(componentsList.iterator()).containsOnly(ZERO_COORDINATES);
+    assertThat(componentsList.iterator()).containsOnly(ZERO_COORDINATE);
   }
 
   @Test

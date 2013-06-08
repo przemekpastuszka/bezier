@@ -6,9 +6,9 @@ package pl.rtshadow.bezier.curve.transformations;
 
 import java.util.List;
 
-import pl.rtshadow.bezier.components.Coordinates;
+import pl.rtshadow.bezier.util.Coordinate;
 import pl.rtshadow.bezier.util.BoundedIterable;
 
 public interface BezierTransformation {
-  List<Coordinates> apply(BoundedIterable<Coordinates> controlPoints);
+  List<Coordinate> apply(BoundedIterable<Coordinate> controlPoints);
 }

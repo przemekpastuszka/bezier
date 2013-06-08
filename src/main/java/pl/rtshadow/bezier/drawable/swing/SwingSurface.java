@@ -12,7 +12,7 @@ import java.util.Collection;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 
-import pl.rtshadow.bezier.components.Coordinates;
+import pl.rtshadow.bezier.util.Coordinate;
 import pl.rtshadow.bezier.drawable.Surface;
 
 public class SwingSurface extends JPanel implements Surface {
@@ -23,10 +23,10 @@ public class SwingSurface extends JPanel implements Surface {
   }
 
   @Override
-  public void drawPoints(Collection<Coordinates> coordinates, final Color color) {
-    pixels.addAll(Collections2.transform(coordinates, new Function<Coordinates, Pixel>() {
+  public void drawPoints(Collection<Coordinate> coordinates, final Color color) {
+    pixels.addAll(Collections2.transform(coordinates, new Function<Coordinate, Pixel>() {
       @Override
-      public Pixel apply(Coordinates input) {
+      public Pixel apply(Coordinate input) {
         return new Pixel(input, color);
       }
     }));

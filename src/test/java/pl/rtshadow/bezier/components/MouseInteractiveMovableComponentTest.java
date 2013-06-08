@@ -33,10 +33,11 @@ import pl.rtshadow.bezier.bridge.events.MouseAction;
 import pl.rtshadow.bezier.bridge.events.MouseActionData;
 import pl.rtshadow.bezier.bridge.events.MouseActionListener;
 import pl.rtshadow.bezier.components.listeners.ComponentActionListener;
+import pl.rtshadow.bezier.util.Coordinate;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MouseInteractiveMovableComponentTest {
-  private static final Coordinates ZERO_POINT = new Coordinates(0, 0);
+  private static final Coordinate ZERO_POINT = new Coordinate(0, 0);
 
   @Mock
   private ComponentActionListener removalListener;
@@ -74,10 +75,10 @@ public class MouseInteractiveMovableComponentTest {
 
   @Test
   public void movesComponentWhenDraggedByMouse() {
-    notifyAll(MOUSE_PRESSED, new MouseActionData(new Coordinates(100, 100), LEFT));
-    notifyAll(MOUSE_DRAGGED, new MouseActionData(new Coordinates(200, 300), LEFT));
+    notifyAll(MOUSE_PRESSED, new MouseActionData(new Coordinate(100, 100), LEFT));
+    notifyAll(MOUSE_DRAGGED, new MouseActionData(new Coordinate(200, 300), LEFT));
 
-    verify(externalMouseDrivenComponent).setCoordinates(new Coordinates(100, 200));
+    verify(externalMouseDrivenComponent).setCoordinates(new Coordinate(100, 200));
   }
 
   private void retrieveRegisteredListeners() {

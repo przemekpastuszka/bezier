@@ -4,18 +4,17 @@
 
 package pl.rtshadow.bezier.curve;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static java.lang.Math.abs;
-
 import java.awt.*;
+import java.util.Collection;
 import java.util.List;
 
-import pl.rtshadow.bezier.components.Coordinates;
 import pl.rtshadow.bezier.components.InteractiveComponentsList;
+import pl.rtshadow.bezier.curve.draw.DensePixelEvaluator;
 import pl.rtshadow.bezier.curve.evaluation.BezierEvaluationAlgorithm;
 import pl.rtshadow.bezier.curve.transformations.BezierTransformation;
 import pl.rtshadow.bezier.drawable.Surface;
 import pl.rtshadow.bezier.util.BoundedIterable;
+import pl.rtshadow.bezier.util.Coordinate;
 
 public class BezierCurve {
   private final InteractiveComponentsList controlPoints;
@@ -34,7 +33,7 @@ public class BezierCurve {
     }
   }
 
-  public List<Coordinates> transformation(BezierTransformation transformation) {
+  public List<Coordinate> transformation(BezierTransformation transformation) {
     return transformation.apply(controlPoints);
   }
 
@@ -42,32 +41,7 @@ public class BezierCurve {
     controlPoints.deactivate();
   }
 
-  private List<Coordinates> computeDrawPoints(BoundedIterable<Coordinates> controlPoints) {
-    List<Coordinates> pointsToDraw = newArrayList();
-
-    double step = 0.01f;
-
-    Coordinates previousPoint = evaluationAlgorithm.evaluatePoint(controlPoints, 0);
-    pointsToDraw.add(previousPoint);
-
-    for (double t = 0; t <= 1 - step; t += step) {
-
-      while (true) {
-        Coordinates nextPointCandidate = evaluationAlgorithm.evaluatePoint(controlPoints, t + step);
-        if (areClose(previousPoint, nextPointCandidate)) {
-          pointsToDraw.add(nextPointCandidate);
-          previousPoint = nextPointCandidate;
-          break;
-        }
-
-        step /= 2;
-      }
-
-    }
-    return pointsToDraw;
-  }
-
-  private boolean areClose(Coordinates a, Coordinates b) {
-    return abs(a.getX() - b.getX()) <= 1 && abs(a.getY() - b.getY()) <= 1;
+  private Collection<Coordinate> computeDrawPoints(BoundedIterable<Coordinate> controlPoints) {
+    return new DensePixelEvaluator().computePixelPositionsFrom(controlPoints, evaluationAlgorithm);
   }
 }

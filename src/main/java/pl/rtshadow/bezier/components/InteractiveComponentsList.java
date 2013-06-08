@@ -21,8 +21,9 @@ import pl.rtshadow.bezier.components.actions.ComponentAction;
 import pl.rtshadow.bezier.components.factory.ActionBasedComponentFactory;
 import pl.rtshadow.bezier.components.listeners.ComponentActionListener;
 import pl.rtshadow.bezier.util.BoundedIterable;
+import pl.rtshadow.bezier.util.Coordinate;
 
-public class InteractiveComponentsList implements BoundedIterable<Coordinates> {
+public class InteractiveComponentsList implements BoundedIterable<Coordinate> {
   private final List<InteractiveComponent> components = new ArrayList<>();
   private final Multimap<ComponentAction, ComponentActionListener> listeners = HashMultimap.create();
   private final ActionBasedComponentFactory factory;
@@ -67,8 +68,8 @@ public class InteractiveComponentsList implements BoundedIterable<Coordinates> {
     listeners.put(componentAction, componentActionListener);
   }
 
-  public void add(Coordinates coordinates) {
-    add(factory.createFromPosition(coordinates));
+  public void add(Coordinate coordinate) {
+    add(factory.createFromPosition(coordinate));
   }
 
   private boolean add(InteractiveComponent component) {
@@ -94,10 +95,10 @@ public class InteractiveComponentsList implements BoundedIterable<Coordinates> {
   }
 
   @Override
-  public Iterator<Coordinates> iterator() {
-    return Iterators.transform(components.iterator(), new Function<InteractiveComponent, Coordinates>() {
+  public Iterator<Coordinate> iterator() {
+    return Iterators.transform(components.iterator(), new Function<InteractiveComponent, Coordinate>() {
       @Override
-      public Coordinates apply(InteractiveComponent input) {
+      public Coordinate apply(InteractiveComponent input) {
         return input.getCoordinates();
       }
     });

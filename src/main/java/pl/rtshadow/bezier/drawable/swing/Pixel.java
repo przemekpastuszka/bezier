@@ -8,14 +8,14 @@ import java.awt.*;
 
 import org.apache.commons.lang3.tuple.MutablePair;
 
-import pl.rtshadow.bezier.components.Coordinates;
+import pl.rtshadow.bezier.util.Coordinate;
 
-public class Pixel extends MutablePair<Coordinates, Color> {
-  public Pixel(Coordinates left, Color right) {
+public class Pixel extends MutablePair<Coordinate, Color> {
+  public Pixel(Coordinate left, Color right) {
     super(left, right);
   }
 
-  public Coordinates getPosition() {
+  public Coordinate getPosition() {
     return getLeft();
   }
 

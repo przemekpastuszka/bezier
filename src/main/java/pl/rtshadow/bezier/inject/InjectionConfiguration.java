@@ -12,7 +12,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import pl.rtshadow.bezier.bridge.components.swing.SwingMouseDrivenComponent;
-import pl.rtshadow.bezier.components.Coordinates;
+import pl.rtshadow.bezier.util.Coordinate;
 import pl.rtshadow.bezier.components.InteractiveComponent;
 import pl.rtshadow.bezier.components.InteractiveComponentsList;
 import pl.rtshadow.bezier.components.MouseInteractiveMovableComponent;
@@ -73,8 +73,8 @@ public class InjectionConfiguration extends AbstractModule {
       int itemCount = 0;
 
       @Override
-      public InteractiveComponent createFromPosition(Coordinates coordinates) {
-        Component button = new SomeButton(itemCount++, coordinates.getXAsInt(), coordinates.getYAsInt());
+      public InteractiveComponent createFromPosition(Coordinate coordinate) {
+        Component button = new SomeButton(itemCount++, coordinate.getXAsInt(), coordinate.getYAsInt());
         container.add(button, 2 * (container.highestLayer() / 2) + 1, 0);
         return new MouseInteractiveMovableComponent(
             new SwingMouseDrivenComponent(button, container));

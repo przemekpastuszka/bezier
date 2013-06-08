@@ -4,7 +4,7 @@
 
 package pl.rtshadow.bezier.bridge.events;
 
-import pl.rtshadow.bezier.components.Coordinates;
+import pl.rtshadow.bezier.util.Coordinate;
 
 public class MouseActionData {
   public enum ButtonPressed {
@@ -13,10 +13,10 @@ public class MouseActionData {
     OTHER;
   }
 
-  private final Coordinates mousePosition;
+  private final Coordinate mousePosition;
   private final ButtonPressed buttonPressed;
 
-  public MouseActionData(Coordinates mousePosition, ButtonPressed buttonPressed) {
+  public MouseActionData(Coordinate mousePosition, ButtonPressed buttonPressed) {
     this.mousePosition = mousePosition;
     this.buttonPressed = buttonPressed;
   }
@@ -25,7 +25,7 @@ public class MouseActionData {
     return buttonPressed;
   }
 
-  public Coordinates getMousePosition() {
+  public Coordinate getMousePosition() {
     return mousePosition;
   }
 }

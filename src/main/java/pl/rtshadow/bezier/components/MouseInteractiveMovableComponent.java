@@ -11,6 +11,7 @@ import static pl.rtshadow.bezier.components.actions.ComponentAction.MOVED;
 import pl.rtshadow.bezier.bridge.components.ExternalMouseDrivenComponent;
 import pl.rtshadow.bezier.bridge.events.MouseActionData;
 import pl.rtshadow.bezier.bridge.events.MouseActionListener;
+import pl.rtshadow.bezier.util.Coordinate;
 
 public class MouseInteractiveMovableComponent extends MouseInteractiveComponent {
   private double draggedAtX, draggedAtY;
@@ -33,7 +34,7 @@ public class MouseInteractiveMovableComponent extends MouseInteractiveComponent 
     externalComponent.addMouseActionListener(MOUSE_DRAGGED, new MouseActionListener() {
       @Override
       public void onMouseAction(MouseActionData action) {
-        externalComponent.setCoordinates(new Coordinates(
+        externalComponent.setCoordinates(new Coordinate(
             action.getMousePosition().getX() - draggedAtX + externalComponent.getCoordinates().getX(),
             action.getMousePosition().getY() - draggedAtY + externalComponent.getCoordinates().getY()
             ));

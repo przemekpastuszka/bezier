@@ -32,7 +32,7 @@ import pl.rtshadow.bezier.bridge.components.swing.SwingMouseDrivenComponent;
 import pl.rtshadow.bezier.bridge.events.MouseAction;
 import pl.rtshadow.bezier.bridge.events.MouseActionData;
 import pl.rtshadow.bezier.bridge.events.MouseActionListener;
-import pl.rtshadow.bezier.components.Coordinates;
+import pl.rtshadow.bezier.util.Coordinate;
 import pl.rtshadow.bezier.components.InteractiveComponentsList;
 import pl.rtshadow.bezier.components.actions.ComponentAction;
 import pl.rtshadow.bezier.components.listeners.ComponentActionListener;
@@ -91,9 +91,9 @@ public class BezierApplication {
     curves.add(newCurve);
   }
 
-  private static BezierCurve bezierCurveFrom(Collection<Coordinates> points) {
+  private static BezierCurve bezierCurveFrom(Collection<Coordinate> points) {
     InteractiveComponentsList interactivePoints = injector.getInstance(InteractiveComponentsList.class);
-    for (Coordinates point : points) {
+    for (Coordinate point : points) {
       interactivePoints.add(point);
     }
 

@@ -12,7 +12,7 @@ import java.util.Collection;
 import pl.rtshadow.bezier.bridge.components.ExternalMouseDrivenComponent;
 import pl.rtshadow.bezier.bridge.events.MouseActionData;
 import pl.rtshadow.bezier.bridge.events.MouseActionListener;
-import pl.rtshadow.bezier.components.Coordinates;
+import pl.rtshadow.bezier.util.Coordinate;
 import pl.rtshadow.bezier.components.InteractiveComponent;
 
 public class OnClickComponentFactory implements ActionBasedComponentFactory {
@@ -52,7 +52,7 @@ public class OnClickComponentFactory implements ActionBasedComponentFactory {
   }
 
   @Override
-  public InteractiveComponent createFromPosition(Coordinates coordinates) {
-    return factory.createFromPosition(coordinates);
+  public InteractiveComponent createFromPosition(Coordinate coordinate) {
+    return factory.createFromPosition(coordinate);
   }
 }

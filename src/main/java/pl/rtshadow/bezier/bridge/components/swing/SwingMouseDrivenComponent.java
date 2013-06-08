@@ -15,7 +15,7 @@ import pl.rtshadow.bezier.bridge.components.ExternalMouseDrivenComponent;
 import pl.rtshadow.bezier.bridge.events.MouseAction;
 import pl.rtshadow.bezier.bridge.events.MouseActionListener;
 import pl.rtshadow.bezier.bridge.events.swing.SwingMouseActionData;
-import pl.rtshadow.bezier.components.Coordinates;
+import pl.rtshadow.bezier.util.Coordinate;
 
 public class SwingMouseDrivenComponent implements ExternalMouseDrivenComponent {
   private final Component component;
@@ -73,13 +73,13 @@ public class SwingMouseDrivenComponent implements ExternalMouseDrivenComponent {
   }
 
   @Override
-  public Coordinates getCoordinates() {
-    return new Coordinates(component.getLocation());
+  public Coordinate getCoordinates() {
+    return new Coordinate(component.getLocation());
   }
 
   @Override
-  public void setCoordinates(Coordinates coordinates) {
-    component.setLocation(coordinates.getXAsInt(), coordinates.getYAsInt());
+  public void setCoordinates(Coordinate coordinate) {
+    component.setLocation(coordinate.getXAsInt(), coordinate.getYAsInt());
   }
 
   @Override

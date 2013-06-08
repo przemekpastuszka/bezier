@@ -8,35 +8,35 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newArrayListWithCapacity;
 import static java.util.Collections.nCopies;
-import static pl.rtshadow.bezier.components.Coordinates.add;
-import static pl.rtshadow.bezier.components.Coordinates.multiply;
+import static pl.rtshadow.bezier.util.Coordinates.add;
+import static pl.rtshadow.bezier.util.Coordinates.multiply;
 
 import java.util.List;
 
-import pl.rtshadow.bezier.components.Coordinates;
 import pl.rtshadow.bezier.util.BoundedIterable;
+import pl.rtshadow.bezier.util.Coordinate;
 
 public abstract class DegreeElevationInversion implements BezierTransformation {
 
   @Override
-  public List<Coordinates> apply(BoundedIterable<Coordinates> controlPoints) {
+  public List<Coordinate> apply(BoundedIterable<Coordinate> controlPoints) {
     checkArgument(controlPoints.getSize() > 2);
 
-    List<Coordinates> controlPointsCopy = newArrayList(controlPoints);
+    List<Coordinate> controlPointsCopy = newArrayList(controlPoints);
 
     int n = controlPoints.getSize() - 1;
 
-    List<Coordinates> bOneControlPoints = computeFirstPoints(controlPointsCopy, n);
-    List<Coordinates> bTwoControlPoints = computeSecondPoints(controlPointsCopy, n);
+    List<Coordinate> bOneControlPoints = computeFirstPoints(controlPointsCopy, n);
+    List<Coordinate> bTwoControlPoints = computeSecondPoints(controlPointsCopy, n);
     return blend(n, bOneControlPoints, bTwoControlPoints);
   }
 
-  private List<Coordinates> computeFirstPoints(List<Coordinates> controlPoints, int n) {
-    List<Coordinates> bOneControlPoints = newArrayListWithCapacity(n);
+  private List<Coordinate> computeFirstPoints(List<Coordinate> controlPoints, int n) {
+    List<Coordinate> bOneControlPoints = newArrayListWithCapacity(n);
     bOneControlPoints.add(controlPoints.get(0));
     for (int i = 1; i <= n - 1; ++i) {
-      Coordinates lastPoint = bOneControlPoints.get(i - 1);
-      Coordinates nextPoint = multiply(1f / ((float) n - i),
+      Coordinate lastPoint = bOneControlPoints.get(i - 1);
+      Coordinate nextPoint = multiply(1f / ((float) n - i),
           add(
               multiply(n, controlPoints.get(i)),
               multiply(-i, lastPoint)));
@@ -46,12 +46,12 @@ public abstract class DegreeElevationInversion implements BezierTransformation {
     return bOneControlPoints;
   }
 
-  private List<Coordinates> computeSecondPoints(List<Coordinates> controlPoints, int n) {
-    List<Coordinates> bTwoControlPoints = newArrayList(nCopies(n, new Coordinates(0, 0)));
+  private List<Coordinate> computeSecondPoints(List<Coordinate> controlPoints, int n) {
+    List<Coordinate> bTwoControlPoints = newArrayList(nCopies(n, new Coordinate(0, 0)));
     bTwoControlPoints.set(n - 1, controlPoints.get(n));
     for (int i = n - 1; i >= 1; --i) {
-      Coordinates lastPoint = bTwoControlPoints.get(i);
-      Coordinates nextPoint = multiply(1f / (float) i,
+      Coordinate lastPoint = bTwoControlPoints.get(i);
+      Coordinate nextPoint = multiply(1f / (float) i,
           add(
               multiply(n, controlPoints.get(i)),
               multiply(i - n, lastPoint)));
@@ -61,11 +61,11 @@ public abstract class DegreeElevationInversion implements BezierTransformation {
     return bTwoControlPoints;
   }
 
-  private List<Coordinates> blend(int n, List<Coordinates> bOneControlPoints, List<Coordinates> bTwoControlPoints) {
-    List<Coordinates> newControlPoints = newArrayListWithCapacity(n);
+  private List<Coordinate> blend(int n, List<Coordinate> bOneControlPoints, List<Coordinate> bTwoControlPoints) {
+    List<Coordinate> newControlPoints = newArrayListWithCapacity(n);
     List<Double> alphas = getAlphas(n);
     for (int i = 0; i <= n - 1; ++i) {
-      Coordinates nextPoint =
+      Coordinate nextPoint =
           add(
               multiply(1 - alphas.get(i), bOneControlPoints.get(i)),
               multiply(alphas.get(i), bTwoControlPoints.get(i)));
