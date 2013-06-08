@@ -18,4 +18,6 @@ public interface ExternalMouseDrivenComponent {
   void remove();
 
   void deactivate();
+
+  void activate();
 }

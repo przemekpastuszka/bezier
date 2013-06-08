@@ -8,11 +8,11 @@ import javax.swing.*;
 import java.awt.*;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.google.inject.Provides;
-import com.google.inject.Singleton;
 
 import pl.rtshadow.bezier.bridge.components.swing.SwingMouseDrivenComponent;
-import pl.rtshadow.bezier.util.Coordinate;
 import pl.rtshadow.bezier.components.InteractiveComponent;
 import pl.rtshadow.bezier.components.InteractiveComponentsList;
 import pl.rtshadow.bezier.components.MouseInteractiveMovableComponent;
@@ -20,45 +20,27 @@ import pl.rtshadow.bezier.components.factory.ComponentFactory;
 import pl.rtshadow.bezier.components.factory.OnClickComponentFactory;
 import pl.rtshadow.bezier.curve.evaluation.BezierEvaluationAlgorithm;
 import pl.rtshadow.bezier.curve.evaluation.DeCasteljauAlgorithm;
+import pl.rtshadow.bezier.curve.factory.BezierCurveFactory;
+import pl.rtshadow.bezier.curve.factory.DefaultBezierCurveFactory;
 import pl.rtshadow.bezier.drawable.Surface;
 import pl.rtshadow.bezier.drawable.swing.SwingSurface;
+import pl.rtshadow.bezier.util.Coordinate;
 
 public class InjectionConfiguration extends AbstractModule {
-  private static final int WIDTH = 800;
-  private static final int HEIGHT = 600;
+  private final static Injector injector = Guice.createInjector(new InjectionConfiguration());
+
+  public static Injector getInjector() {
+    return injector;
+  }
 
   @Override
   protected void configure() {
     bind(Surface.class).to(SwingSurface.class);
-    bind(Container.class).to(JLayeredPane.class);
+    bind(SwingSurface.class).toInstance(new SwingSurface());
+    bind(BezierCurveFactory.class).to(DefaultBezierCurveFactory.class);
     bind(BezierEvaluationAlgorithm.class).to(DeCasteljauAlgorithm.class);
-  }
 
-  @Provides
-  @Singleton
-  public JLayeredPane provideLayeredPane() {
-     return new JLayeredPane();
-  }
-
-  @Provides
-  @Singleton
-  public JFrame provideFrame(JLayeredPane pane) {
-    JFrame frame = new JFrame();
-    frame.setLayout(new BorderLayout());
-    frame.setSize(WIDTH, HEIGHT);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setLocationRelativeTo(null);
-    frame.add(pane, BorderLayout.CENTER);
-    frame.setVisible(true);
-    return frame;
-  }
-
-  @Provides
-  @Singleton
-  public SwingSurface provideDrawingSurface(JLayeredPane container) {
-    SwingSurface swingSurface = new SwingSurface(WIDTH, HEIGHT);
-    container.add(swingSurface, new Integer(0), 0);
-    return swingSurface;
+    bind(Container.class).to(SwingSurface.class);
   }
 
   @Provides
@@ -68,14 +50,14 @@ public class InjectionConfiguration extends AbstractModule {
   }
 
   @Provides
-  public ComponentFactory provideButtonFactory(final JLayeredPane container) {
+  public ComponentFactory provideButtonFactory(final Container container) {
     return new ComponentFactory() {
       int itemCount = 0;
 
       @Override
       public InteractiveComponent createFromPosition(Coordinate coordinate) {
         Component button = new SomeButton(itemCount++, coordinate.getXAsInt(), coordinate.getYAsInt());
-        container.add(button, 2 * (container.highestLayer() / 2) + 1, 0);
+        container.add(button);
         return new MouseInteractiveMovableComponent(
             new SwingMouseDrivenComponent(button, container));
       }

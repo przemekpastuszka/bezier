@@ -16,6 +16,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Multimap;
+import com.google.inject.Inject;
 
 import pl.rtshadow.bezier.components.actions.ComponentAction;
 import pl.rtshadow.bezier.components.factory.ActionBasedComponentFactory;
@@ -28,6 +29,7 @@ public class InteractiveComponentsList implements BoundedIterable<Coordinate> {
   private final Multimap<ComponentAction, ComponentActionListener> listeners = HashMultimap.create();
   private final ActionBasedComponentFactory factory;
 
+  @Inject
   public InteractiveComponentsList(ActionBasedComponentFactory factory) {
      factory.addComponentCreationListener(new ActionBasedComponentFactory.ComponentCreationListener() {
        @Override
@@ -87,6 +89,13 @@ public class InteractiveComponentsList implements BoundedIterable<Coordinate> {
      for(InteractiveComponent interactiveComponent : components) {
          interactiveComponent.deactivate();
      }
+  }
+
+  public void activate() {
+    factory.activate();
+    for(InteractiveComponent interactiveComponent : components) {
+      interactiveComponent.activate();
+    }
   }
 
   @Override

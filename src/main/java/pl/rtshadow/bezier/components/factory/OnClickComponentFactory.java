@@ -47,6 +47,11 @@ public class OnClickComponentFactory implements ActionBasedComponentFactory {
   }
 
   @Override
+  public void activate() {
+    isActive = true;
+  }
+
+  @Override
   public void deactivate() {
     isActive = false;
   }

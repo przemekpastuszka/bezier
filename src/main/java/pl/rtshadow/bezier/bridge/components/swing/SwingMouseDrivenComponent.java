@@ -94,4 +94,9 @@ public class SwingMouseDrivenComponent implements ExternalMouseDrivenComponent {
   public void deactivate() {
     component.setVisible(false);
   }
+
+  @Override
+  public void activate() {
+    component.setVisible(true);
+  }
 }

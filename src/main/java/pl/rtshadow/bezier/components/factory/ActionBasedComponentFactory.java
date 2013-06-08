@@ -10,8 +10,11 @@ public interface ActionBasedComponentFactory extends ComponentFactory {
   void addComponentCreationListener(ComponentCreationListener listener);
 
   public static interface ComponentCreationListener {
+
     void onCreation(InteractiveComponent component);
   }
+
+  void activate();
 
   void deactivate();
 }

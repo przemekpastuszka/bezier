@@ -55,4 +55,9 @@ public class MouseInteractiveComponent implements InteractiveComponent {
   public void deactivate() {
     externalComponent.deactivate();
   }
+
+  @Override
+  public void activate() {
+    externalComponent.activate();
+  }
 }

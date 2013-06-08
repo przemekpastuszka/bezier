@@ -14,4 +14,6 @@ public interface InteractiveComponent {
   Coordinate getCoordinates();
 
   void deactivate();
+
+  void activate();
 }
