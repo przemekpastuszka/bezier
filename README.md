@@ -1,4 +1,6 @@
 # Bezier curves
+Active development years: 2013
+
 ## Summary
 Simple Bezier curves manipulation tool developed for Numerical Analysis 2 course at University of Wrocław, Poland.
 Features:
