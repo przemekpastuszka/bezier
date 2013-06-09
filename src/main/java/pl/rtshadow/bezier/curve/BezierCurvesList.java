@@ -44,11 +44,7 @@ public class BezierCurvesList {
   }
 
   public void setActiveCurve(BezierCurve curve) {
-    if (activeCurve.isPresent()) {
-      activeCurve.get().deactivate();
-    }
     activeCurve = Optional.of(curve);
-    curve.activate();
   }
 
   public BezierCurve getActiveCurve() {

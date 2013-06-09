@@ -20,6 +20,7 @@ import pl.rtshadow.bezier.curve.BezierCurvesList;
 import pl.rtshadow.bezier.curve.factory.BezierCurveFactory;
 import pl.rtshadow.bezier.curve.transformations.BezierTransformation;
 import pl.rtshadow.bezier.curve.transformations.FarinDegreeReduction;
+import pl.rtshadow.bezier.curve.transformations.ForrestDegreeReduction;
 import pl.rtshadow.bezier.curve.transformations.LeastSquaresReduction;
 import pl.rtshadow.bezier.drawable.Surface;
 import pl.rtshadow.bezier.drawable.swing.SwingSurface;
@@ -66,25 +67,34 @@ public class MainWindow {
   }
 
   private void performTransformation(BezierTransformation transformation) {
-    BezierCurve activeCurve = curves.getActiveCurve();
-    BezierCurve newCurve = curveFactory.createCurveFrom(activeCurve.transformation(transformation));
+    BezierCurve oldCurve = curves.getActiveCurve();
+    BezierCurve newCurve = curveFactory.createCurveFrom(oldCurve.transformation(transformation));
 
     curves.add(newCurve);
+    oldCurve.deactivate();
     curves.setActiveCurve(newCurve);
+
     curves.redrawAll(surface);
   }
 
   private void createUIComponents() {
+    prepareDrawArea();
+    prepareComboBox();
+  }
+
+  private void prepareDrawArea() {
     SwingSurface swingSurface = getInjector().getInstance(SwingSurface.class);
     surface = swingSurface;
     drawingArea = swingSurface;
 
-    prepareComboBox();
+    // need to explicitly disable layout, so control points are not moved after invalidation
+    swingSurface.setLayout(null);
   }
 
   private void prepareComboBox() {
     transformationMap = new HashMap<>();
     transformationMap.put("Farin method", new FarinDegreeReduction());
+    transformationMap.put("Forrest method", new ForrestDegreeReduction());
     transformationMap.put("Least squares", new LeastSquaresReduction());
 
     comboBox1 = new JComboBox(transformationMap.keySet().toArray());

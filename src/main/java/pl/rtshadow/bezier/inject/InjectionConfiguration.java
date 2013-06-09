@@ -64,12 +64,12 @@ public class InjectionConfiguration extends AbstractModule {
     };
   }
 
-  private static class SomeButton extends JButton {
+  public static class SomeButton extends JButton {
     public SomeButton(int number, int x, int y) {
       super(Integer.toString(number));
 
       setDoubleBuffered(false);
-      setLocation(x, y);
+      super.setLocation(x, y);
       setMargin(new Insets(0, 0, 0, 0));
       setSize(25, 25);
       setPreferredSize(new Dimension(25, 25));
