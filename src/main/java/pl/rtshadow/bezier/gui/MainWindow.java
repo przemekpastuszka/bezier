@@ -7,6 +7,8 @@ package pl.rtshadow.bezier.gui;
 import static pl.rtshadow.bezier.inject.InjectionConfiguration.getInjector;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
@@ -31,8 +33,9 @@ public class MainWindow {
   private JButton reduceButton;
   private JPanel drawingArea;
   private JPanel mainArea;
-
   private Surface surface;
+
+  private DefaultListModel listModel;
 
   private BezierCurvesList curves = new BezierCurvesList();
   private BezierCurveFactory curveFactory = getInjector().getInstance(BezierCurveFactory.class);
@@ -48,8 +51,14 @@ public class MainWindow {
       }
     });
 
-    curves.add(curveFactory.createCurveFrom(Collections.EMPTY_LIST));
+    curveChooser.addListSelectionListener(new ListSelectionListener() {
+      @Override
+      public void valueChanged(ListSelectionEvent e) {
+        curves.setActiveCurveByIndex((Integer) curveChooser.getSelectedValue());
+      }
+    });
 
+    addCurve(curveFactory.createCurveFrom(Collections.EMPTY_LIST));
     curves.registerOnChangeListener(new ComponentActionListener() {
       @Override
       public void onComponentAction(ComponentAction action) {
@@ -70,16 +79,23 @@ public class MainWindow {
     BezierCurve oldCurve = curves.getActiveCurve();
     BezierCurve newCurve = curveFactory.createCurveFrom(oldCurve.transformation(transformation));
 
-    curves.add(newCurve);
-    oldCurve.deactivate();
-    curves.setActiveCurve(newCurve);
-
+    addCurve(newCurve);
     curves.redrawAll(surface);
+  }
+
+  private int addCurve(BezierCurve curve) {
+    int curveId = curves.add(curve);
+    listModel.addElement(curveId);
+    curveChooser.setSelectedIndex(curveId);
+    return curveId;
   }
 
   private void createUIComponents() {
     prepareDrawArea();
     prepareComboBox();
+
+    listModel = new DefaultListModel<>();
+    curveChooser = new JList(listModel);
   }
 
   private void prepareDrawArea() {

@@ -22,7 +22,12 @@ public class BezierCurvesList {
 
   private final Collection<ComponentActionListener> listeners = newArrayList();
 
-  public void add(BezierCurve curve) {
+  /**
+   *
+   * @param curve
+   * @return curve id
+   */
+  public int add(BezierCurve curve) {
     curves.add(curve);
 
     if (!activeCurve.isPresent()) {
@@ -35,6 +40,8 @@ public class BezierCurvesList {
         notifyListeners(action);
       }
     });
+
+    return curves.size() - 1;
   }
 
   private void notifyListeners(ComponentAction action) {
@@ -43,8 +50,18 @@ public class BezierCurvesList {
     }
   }
 
+  public void setActiveCurveByIndex(int index) {
+    setActiveCurve(curves.get(index));
+  }
+
   public void setActiveCurve(BezierCurve curve) {
+    if(activeCurve.isPresent()) {
+      activeCurve.get().deactivate();
+    }
+
     activeCurve = Optional.of(curve);
+
+    curve.activate();
   }
 
   public BezierCurve getActiveCurve() {
